@@ -43,7 +43,7 @@
           "
         >
           <p>Copyright © LUFYC 2024 — All rights reserved</p>
-          <p>버전 v0.0.4 · 개발자 이현승</p>
+          <p>버전 v0.0.5 · 개발자 이현승</p>
         </div>
       </v-parallax>
 
@@ -59,7 +59,7 @@
 
         <br />
 
-        <v-btn color="blue" variant="outlined" @click="login">
+        <v-btn color="blue" variant="tonal" @click="login" block>
           <b>로그인하기</b>
         </v-btn>
       </v-alert>

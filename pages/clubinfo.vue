@@ -7,8 +7,11 @@
         clubInfo.leader.replaceAll(' ', '') === account.displayName ||
         clubInfo.coleader.replaceAll(' ', '') === account.displayName
       "
-      class="mb-8"
+      class="mb-8 py-4 rounded-lg"
+      style="border: 1px solid black"
     >
+      <h2 class="text-center mb-4">부장/차장 권한</h2>
+
       <div class="d-flex justify-center ga-5 mb-3">
         <v-btn
           variant="tonal"
@@ -25,7 +28,7 @@
           신청자 확인하기
         </v-btn>
       </div>
-      <div class="d-flex justify-center ga-5">
+      <div class="d-flex justify-center ga-5 mb-3">
         <v-btn
           variant="tonal"
           :to="`/clubadmin/message/?clubname=${clubName}`"
@@ -39,6 +42,19 @@
           class="text-blue"
         >
           공지사항 등록하기
+        </v-btn>
+      </div>
+      <div class="d-flex justify-center ga-5">
+        <v-btn
+          v-if="!clubInfo.finished"
+          variant="tonal"
+          color="red"
+          @click="end"
+        >
+          수동 마감하기
+        </v-btn>
+        <v-btn v-else variant="tonal" color="red" @click="undoEnd">
+          마감 풀기
         </v-btn>
       </div>
     </div>
@@ -86,6 +102,7 @@
           'https://firebasestorage.googleapis.com/v0/b/thinkforall-linkall.appspot.com/o/school%2FPGHS.png?alt=media&token=1a077cc3-d8f0-4994-8d62-09d68ef49739'
         "
         draggable="false"
+        height="100px"
         class="rounded-lg"
       />
     </div>
@@ -142,8 +159,8 @@
 
       <br /><br />
 
-      <v-img :src="clubInfo.poster" class="rounded-lg mx-10" />
-      <div class="d-flex justify-center">
+      <v-img :src="clubInfo.poster" class="rounded-lg mx-10 elevation-10"  />
+      <div class="d-flex justify-center mt-3">
         <v-btn variant="tonal" class="mt-3" download :href="clubInfo.poster">
           <v-icon start>mdi-download</v-icon> 다운로드 받기
         </v-btn>
@@ -268,14 +285,25 @@
         >
           이미 다른 동아리에 가입했습니다.
         </v-alert>
-        <div
+
+        <v-alert
           v-else-if="
-            !Object.keys(clubInfo.joining ?? {}).includes(
-              account.displayName
-            ) &&
-            !Object.keys(clubInfo.accepted ?? {}).includes(account.displayName)
+            Object.keys(clubInfo.joining ?? {}).includes(account.displayName)
           "
         >
+          신청이 되었습니다.
+        </v-alert>
+        <v-alert
+          v-else-if="
+            Object.keys(clubInfo.accepted ?? {}).includes(account.displayName)
+          "
+        >
+          동아리에 합격했습니다.
+        </v-alert>
+        <v-alert v-else-if="clubInfo.finished" color="red">
+          동아리가 수동으로 마감이 되었습니다.
+        </v-alert>
+        <div v-else>
           <v-text-field
             v-model="joining.name"
             variant="outlined"
@@ -313,20 +341,6 @@
             신청하기
           </v-btn>
         </div>
-        <v-alert
-          v-else-if="
-            Object.keys(clubInfo.joining ?? {}).includes(account.displayName)
-          "
-        >
-          신청이 되었습니다.
-        </v-alert>
-        <v-alert
-          v-else-if="
-            Object.keys(clubInfo.accepted ?? {}).includes(account.displayName)
-          "
-        >
-          동아리에 합격했습니다.
-        </v-alert>
       </div>
     </div>
   </div>
@@ -412,4 +426,16 @@ onMounted(async () => {
 
   isClubJoiningFinished.value = today > endDate;
 });
+
+function end() {
+  clubInfo.value.finished = true;
+  const messageRef = dbRef($db, `clubs/${clubName}`);
+  set(messageRef, clubInfo.value);
+}
+
+function undoEnd() {
+  clubInfo.value.finished = false;
+  const messageRef = dbRef($db, `clubs/${clubName}`);
+  set(messageRef, clubInfo.value);
+}
 </script>

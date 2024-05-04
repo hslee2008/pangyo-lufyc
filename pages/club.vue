@@ -40,7 +40,7 @@
 
     <br />
 
-    <v-row class="d-flex mx-1">
+    <v-row class="d-flex justify-center">
       <v-col
         v-for="item in Object.values(list ?? {})
           .sort((a, b) => {
@@ -81,8 +81,8 @@
       >
         <v-card
           :to="`/clubinfo?clubname=${item.name}`"
-          width="175"
-          elevation="15"
+          width="150"
+          elevation="20"
         >
           <v-img
             :src="
@@ -91,7 +91,7 @@
             "
             class="align-end"
             gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-            height="175"
+            height="150"
             cover
           >
             <v-card-title class="text-white" style="margin-bottom: -10px">

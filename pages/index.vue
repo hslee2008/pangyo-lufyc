@@ -21,6 +21,18 @@
           원하는 동아리를 찾게 도와줍니다. 실시간으로 다양한 정보를 제공하고
           어플 내에서 동아리원과 부장의 소통이 가능합니다.
         </v-alert>
+
+        <br />
+        <br />
+
+        <v-btn
+          variant="tonal"
+          class="rounded-circle"
+          size="x-large"
+          style="background-color: white"
+          icon="mdi-arrow-down"
+          @click="() => (y += 5000)"
+        ></v-btn>
       </v-parallax>
 
       <br />
@@ -67,8 +79,8 @@
           ></v-img>
 
           <div>
-            <b>{{ account.displayName }}</b>
-            님
+            <b>{{ account.displayName }}</b
+            >님
 
             <br />
 
@@ -86,6 +98,9 @@ import {
   signInWithPopup,
   onAuthStateChanged,
 } from "firebase/auth";
+import { useWindowScroll } from "@vueuse/core";
+
+const { x, y } = useWindowScroll({ behavior: "smooth" });
 
 const { $auth, $db } = useNuxtApp();
 

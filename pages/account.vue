@@ -6,8 +6,8 @@
 
     <br />
 
-    <v-table>
-      <thead>
+    <v-table class="rounded-lg">
+      <thead style="background-color: #87ceeb">
         <tr>
           <th class="text-left">카테고리</th>
           <th class="text-left">정보</th>
@@ -37,7 +37,7 @@
 
     <br /><br />
 
-    <h2 class="text-center">알림</h2>
+    <h2 class="text-center">사이트 알림</h2>
     <br />
     <v-list v-if="notification" bg-color="grey-lighten-3">
       <v-list-item v-for="(notif, i) in notification" :key="i" class="mb-3">
@@ -50,6 +50,20 @@
         >
           <v-icon start>mdi-trash-can</v-icon> 지우기
         </v-btn>
+      </v-list-item>
+    </v-list>
+    <div v-else>
+      <v-alert class="text-center">사이트 알림이 없습니다.</v-alert>
+    </div>
+
+    <br /><br />
+
+    <h2 class="text-center">동아리 알림</h2>
+    <br />
+    <v-list v-if="notification" bg-color="grey-lighten-3" lines="two">
+      <v-list-item v-for="(notif, i) in clubNotification" :key="i" class="mb-3">
+        <v-list-item-title>{{ notif.date }} </v-list-item-title>
+        <v-list-item-subtitle>{{ notif.message }}</v-list-item-subtitle>
       </v-list-item>
     </v-list>
     <div v-else>
@@ -75,6 +89,7 @@ const router = useRouter();
 const account = ref({});
 const type = ref("");
 const notification = ref({});
+const clubNotification = ref([]);
 
 const logout = () => {
   router.push("/");
@@ -94,16 +109,26 @@ onMounted(() => {
     account.value = user;
 
     if (user) {
-      const userDB = dbRef($db, `/everyone/${user.displayName}/type`);
-      onValue(userDB, (snapshot) => {
+      onValue(dbRef($db, `/everyone/${user.displayName}/type`), (snapshot) => {
         const data = snapshot.val();
         type.value = data;
       });
 
-      const accountDB = dbRef($db, `/member/${user.displayName}/notification`);
-      onValue(accountDB, (snapshot) => {
+      onValue(
+        dbRef($db, `/member/${user.displayName}/notification`),
+        (snapshot) => {
+          const data = snapshot.val();
+          notification.value = data;
+        }
+      );
+
+      onValue(dbRef($db, `/member/${user.displayName}/club`), (snapshot) => {
         const data = snapshot.val();
-        notification.value = data;
+        const clubNotificationRef = dbRef($db, `/clubs/${data}/notification`);
+        onValue(clubNotificationRef, (snapshot) => {
+          const data = snapshot.val();
+          clubNotification.value = data;
+        });
       });
     }
   });

@@ -2,23 +2,46 @@
   <div class="mx-4">
     <br />
 
-    <p
+    <div
       v-if="
         clubInfo.leader.replaceAll(' ', '') === account.displayName ||
         clubInfo.coleader.replaceAll(' ', '') === account.displayName
       "
-      class="d-flex justify-center ga-4"
+      class="mb-8"
     >
-      <NuxtLink :to="`/edit/?clubname=${clubName}`" class="text-blue">
-        정보 편집하기
-      </NuxtLink>
-      <NuxtLink :to="`/status/?clubname=${clubName}`" class="text-blue">
-        신청자 확인하기
-      </NuxtLink>
-      <NuxtLink :to="`/message/?clubname=${clubName}`" class="text-blue">
-        문의 확인하기
-      </NuxtLink>
-    </p>
+      <div class="d-flex justify-center ga-5 mb-3">
+        <v-btn
+          variant="tonal"
+          :to="`/clubadmin/edit/?clubname=${clubName}`"
+          class="text-blue"
+        >
+          정보 편집하기
+        </v-btn>
+        <v-btn
+          variant="tonal"
+          :to="`/clubadmin/status/?clubname=${clubName}`"
+          class="text-blue"
+        >
+          신청자 확인하기
+        </v-btn>
+      </div>
+      <div class="d-flex justify-center ga-5">
+        <v-btn
+          variant="tonal"
+          :to="`/clubadmin/message/?clubname=${clubName}`"
+          class="text-blue"
+        >
+          문의 확인하기
+        </v-btn>
+        <v-btn
+          variant="tonal"
+          :to="`/clubadmin/notification/?clubname=${clubName}`"
+          class="text-blue"
+        >
+          공지사항 등록하기
+        </v-btn>
+      </div>
+    </div>
 
     <v-layout-item model-value position="bottom" class="text-end" size="88">
       <div class="ma-4">

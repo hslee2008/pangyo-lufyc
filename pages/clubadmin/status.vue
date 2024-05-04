@@ -241,6 +241,10 @@ const joining = async (info, isActive) => {
     // set approved true
     const approvedRef = dbRef($db, `member/${info.name}/approved/`);
     set(approvedRef, true);
+
+    // set approved true
+    const clubNameRef = dbRef($db, `member/${info.name}/club/`);
+    set(clubNameRef, clubName);
   }
 
   isActive.value = false;

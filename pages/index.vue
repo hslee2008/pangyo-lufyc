@@ -12,10 +12,9 @@
             draggable="false"
           />
         </div>
-        <h1 class="text-white">찾아줄게! 너의 동아리</h1>
-
-        <br />
-
+        <h1 class="text-white mt-2 mb-3" style="font-size: 35px">
+          찾아줄게! 너의 동아리
+        </h1>
         <v-alert class="mx-4 text-justify" elevation="24">
           찾아줄게! 너의 동아리 어플은 판교고등학교 학생들이 보다 쉽게 자신이
           원하는 동아리를 찾게 도와줍니다. 실시간으로 다양한 정보를 제공하고
@@ -33,6 +32,19 @@
           icon="mdi-arrow-down"
           @click="() => (y += 5000)"
         ></v-btn>
+
+        <div
+          style="
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background-color: white;
+            opacity: 0.6;
+          "
+        >
+          <p>Copyright © LUFYC 2024 — All rights reserved</p>
+          <p>버전 v0.0.4 · 개발자 이현승</p>
+        </div>
       </v-parallax>
 
       <br />

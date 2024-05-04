@@ -1,23 +1,27 @@
 <template>
   <div>
-    <br /><br />
-
     <div class="text-center">
-      <p color="text-gray">
-        <img
-          src="https://pangyo-h.goesn.kr/upload/pangyo-h/logo/img_9e63452b-11df-4ae5-aba6-8cb5def1c5bc1637653713039.png"
-          draggable="false"
-        />
-      </p>
-      <h1>찾아줄게, 너의 동아리</h1>
+      <v-parallax src="/pangyo.png">
+        <div
+          color="text-gray"
+          class="mt-7 pt-2 mb-3"
+          style="background-color: white"
+        >
+          <img
+            src="https://pangyo-h.goesn.kr/upload/pangyo-h/logo/img_9e63452b-11df-4ae5-aba6-8cb5def1c5bc1637653713039.png"
+            draggable="false"
+          />
+        </div>
+        <h1 class="text-white">찾아줄게! 너의 동아리</h1>
 
-      <br />
+        <br />
 
-      <v-alert class="mx-4 text-justify">
-        찾아줄게, 너의 동아리 어플은 판교고등학교 학생들이 보다 쉽게 자신이
-        원하는 동아리를 찾게 도와줍니다. 실시간으로 다양한 정보를 제공하고 어플
-        내에서 동아리원과 부장의 소통이 가능합니다.
-      </v-alert>
+        <v-alert class="mx-4 text-justify" elevation="24">
+          찾아줄게! 너의 동아리 어플은 판교고등학교 학생들이 보다 쉽게 자신이
+          원하는 동아리를 찾게 도와줍니다. 실시간으로 다양한 정보를 제공하고
+          어플 내에서 동아리원과 부장의 소통이 가능합니다.
+        </v-alert>
+      </v-parallax>
 
       <br />
       <br />
@@ -31,17 +35,9 @@
 
         <br />
 
-        <div class="d-flex justify-center ga-4">
-          <v-btn color="blue" variant="outlined" @click="asmember">
-            <b>동아리원</b>
-          </v-btn>
-          <v-btn color="purple" variant="outlined" to="/login/asleader">
-            <b>부장 · 차장</b>
-          </v-btn>
-          <v-btn color="teal" variant="outlined" @click="asteacher">
-            <b>선생님</b>
-          </v-btn>
-        </div>
+        <v-btn color="blue" variant="outlined" @click="login">
+          <b>로그인하기</b>
+        </v-btn>
       </v-alert>
 
       <v-alert
@@ -63,19 +59,22 @@
         v-if="account && account?.email?.includes('pangyo.hs.kr')"
         class="text-justify mx-4 mt-2"
       >
-        <b>{{ account.displayName }}</b>
-        님
+        <div class="d-flex">
+          <v-img
+            :src="account.photoURL"
+            class="rounded-circle mr-5"
+            max-width="50"
+          ></v-img>
 
-        <br />
+          <div>
+            <b>{{ account.displayName }}</b>
+            님
 
-        동아리원으로 접수가 되었습니다.
+            <br />
 
-        <br /><br />
-
-        <ul>
-          <li>1. 하단의 <동아리>에서 동아리 명단을 확인하세요.</li>
-          <li>2. 하단의 <계정>에서 친구들이 볼 계정 정보를 편집하세요.</li>
-        </ul>
+            동아리원으로 접수가 되었습니다.
+          </div>
+        </div>
       </v-alert>
     </div>
   </div>
@@ -90,8 +89,6 @@ import {
 
 const { $auth, $db } = useNuxtApp();
 
-const router = useRouter();
-
 const account = ref({});
 
 const logout = () => {
@@ -99,14 +96,16 @@ const logout = () => {
   account.value = null;
 };
 
-const asmember = async () => {
+const login = async () => {
   const provider = new GoogleAuthProvider();
 
   signInWithPopup($auth, provider).then(() =>
     onAuthStateChanged($auth, async (user) => {
       account.value = user;
 
-      if (user?.email?.includes("pangyo.hs.kr")) {
+      if (!user?.email?.includes("pangyo.hs.kr")) return;
+
+      if (/^\d+$/.test(user?.email?.slice(0, user?.email?.indexOf("@")))) {
         const everyone = dbRef($db, `everyone/${user.displayName}`);
         set(everyone, {
           name: user.displayName,
@@ -122,19 +121,7 @@ const asmember = async () => {
           uid: user.uid,
           photoURL: user.photoURL,
         });
-      }
-    })
-  );
-};
-
-const asteacher = async () => {
-  const provider = new GoogleAuthProvider();
-
-  signInWithPopup($auth, provider).then(() =>
-    onAuthStateChanged($auth, async (user) => {
-      account.value = user;
-
-      if (user?.email?.includes("pangyo.hs.kr") || true) {
+      } else {
         const everyone = dbRef($db, `everyone/${user.displayName}`);
         set(everyone, {
           name: user.displayName,

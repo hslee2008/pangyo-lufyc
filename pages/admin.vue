@@ -1,5 +1,7 @@
 <template>
   <div style="width: 95%">
+    <br />
+
     <h1 class="text-center">동아리 편집</h1>
 
     <br />
@@ -50,19 +52,13 @@
       <br />
 
       <v-list style="background-color: transparent">
-        <v-list-item v-for="item in list" :key="item.name">
+        <v-list-item v-for="item in list" :key="item.name" class="mb-3">
           <v-list-item-title>{{ item.name }}</v-list-item-title>
           <v-list-item-subtitle>
             {{ item.leader }} / {{ item.coleader }}
           </v-list-item-subtitle>
         </v-list-item>
       </v-list>
-    </v-alert>
-
-    <br />
-
-    <v-alert>
-      <h2>부장 명단 확인하기</h2>
     </v-alert>
   </div>
 </template>

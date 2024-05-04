@@ -228,7 +228,7 @@ const joining = async (info, isActive) => {
     // notify of the removal
     const memberNotifRef = dbRef($db, `member/${info.name}/notification/`);
     push(memberNotifRef, {
-      message: `축하합니다. ${clubName} 동아리에 들어가게 되었습니다. 공지사항은 이 앱을 통해 부장으로부터 받을 수 있습니다..`,
+      message: `축하합니다. ${clubName} 동아리에 합격하였습니다.`,
     });
 
     console.log(data);

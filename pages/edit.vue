@@ -39,6 +39,8 @@
       ></v-file-input>
 
       만일, 이미지를 업로드하지 않는다면, 판교고 로고를 사용할 것입니다.
+
+      <v-img :src="clubInfo.image" class="rounded-lg mt-3"></v-img>
     </v-alert>
     <br />
     <v-alert>
@@ -49,7 +51,7 @@
         @update:model-value="uploadPoster($event)"
       ></v-file-input>
 
-      <v-img :src="clubInfo.poster"></v-img>
+      <v-img :src="clubInfo.poster" class="rounded-lg"></v-img>
     </v-alert>
 
     <br />
@@ -75,11 +77,7 @@
               class="mt-4"
             >
               <template v-slot:chip="{ props, item }">
-                <v-chip
-                  v-bind="props"
-                  :prepend-avatar="item.raw.avatar"
-                  :text="item.raw.name"
-                ></v-chip>
+                <v-chip v-bind="props" :text="item.raw.name"></v-chip>
               </template>
             </v-autocomplete>
           </td>

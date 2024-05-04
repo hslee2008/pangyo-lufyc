@@ -1,6 +1,8 @@
 <template>
   <div style="width: 95%">
-    <h1 class="text-center">계정 정보</h1>
+    <br />
+
+    <h2 class="text-center">계정 정보</h2>
 
     <br />
 
@@ -15,7 +17,7 @@
         <tr>
           <td>계정 정보</td>
           <td>
-            {{ type }}
+            {{ type === "teacher" ? "선생님" : "학생" }}
           </td>
         </tr>
         <tr>
@@ -35,10 +37,11 @@
 
     <br /><br />
 
-    <h2>알림</h2>
-    <v-list bg-color="grey-lighten-3">
-      <v-list-item v-for="(notif, i) in notification" :key="i">
-        <v-list-item-title>{{ notif.message }}</v-list-item-title>
+    <h2 class="text-center">알림</h2>
+    <br />
+    <v-list v-if="notification" bg-color="grey-lighten-3">
+      <v-list-item v-for="(notif, i) in notification" :key="i" class="mb-3">
+        <p>{{ notif.message }}</p>
         <v-btn
           @click="deleteNotification(i)"
           block
@@ -49,13 +52,16 @@
         </v-btn>
       </v-list-item>
     </v-list>
+    <div v-else>
+      <v-alert class="text-center">알림이 없습니다.</v-alert>
+    </div>
 
     <br />
     <br />
-    <br />
-    <br />
 
-    <v-btn color="red" block @click="logout"> 로그아웃 </v-btn>
+    <div class="d-flex justify-center">
+      <v-btn color="red" @click="logout"> 로그아웃 </v-btn>
+    </div>
   </div>
 </template>
 

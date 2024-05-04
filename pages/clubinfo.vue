@@ -64,11 +64,8 @@
         "
         draggable="false"
         class="rounded-lg"
-        style="width: 300px"
       />
     </div>
-
-    <br />
 
     <h1 class="text-center">{{ clubName }}</h1>
     <h3 class="text-center">
@@ -79,7 +76,7 @@
     <br />
 
     <div>
-      {{ clubInfo.description }}
+      <p>{{ clubInfo.description }}</p>
     </div>
 
     <br />
@@ -122,11 +119,7 @@
 
       <br /><br />
 
-      <v-img
-        :src="clubInfo.poster"
-        class="rounded-lg mx-10"
-        style="border: 1px solid black"
-      />
+      <v-img :src="clubInfo.poster" class="rounded-lg mx-10" />
       <div class="d-flex justify-center">
         <v-btn variant="tonal" class="mt-3" download :href="clubInfo.poster">
           <v-icon start>mdi-download</v-icon> 다운로드 받기
@@ -134,8 +127,6 @@
       </div>
 
       <br /><br />
-      <hr />
-      <br />
 
       <h2>경쟁률 확인하기</h2>
       <br />
@@ -233,80 +224,87 @@
       </v-table>
     </div>
 
-    <br />
-    <hr />
-    <br /><br />
+    <div v-if="typeofAccount !== 'teacher'">
+      <br /><br />
 
-    <div>
-      <h2>신청하기</h2>
-      <br />
+      <div>
+        <h2>신청하기</h2>
+        <br />
 
-      <v-alert
-        v-if="
-          alreadyJoined &&
-          !Object.keys(clubInfo.joining ?? {}).includes(account.displayName) &&
-          !Object.keys(clubInfo.accepted ?? {}).includes(account.displayName)
-        "
-      >
-        이미 다른 동아리에 가입했습니다.
-      </v-alert>
-      <div
-        v-else-if="
-          !Object.keys(clubInfo.joining ?? {}).includes(account.displayName) &&
-          !Object.keys(clubInfo.accepted ?? {}).includes(account.displayName)
-        "
-      >
-        <v-text-field
-          v-model="joining.name"
-          variant="outlined"
-          disabled
-          label="학번과 이름"
-        ></v-text-field>
-        <v-text-field
-          v-model="joining.email"
-          variant="outlined"
-          disabled
-          label="학교 이메일"
-        ></v-text-field>
-        <v-text-field
-          v-model="joining.phone"
-          variant="outlined"
-          label="전화번호"
-        ></v-text-field>
-        <v-textarea
-          v-if="clubInfo.getWhyJoined"
-          v-model="joining.whyJoined"
-          variant="outlined"
-          placeholder="자기소개 부분 (필수)"
-        ></v-textarea>
-
-        <v-btn
-          block
-          variant="tonal"
-          color="yellow-darken-4"
-          @click="join"
-          :disabled="
-            !joining.phone ||
-            (clubInfo.getWhyJoined ? !joining.whyJoined : false)
+        <v-alert v-if="isClubJoiningFinished" color="red">
+          모집 기간이 자났습니다.
+        </v-alert>
+        <v-alert
+          v-else-if="
+            alreadyJoined &&
+            !Object.keys(clubInfo.joining ?? {}).includes(
+              account.displayName
+            ) &&
+            !Object.keys(clubInfo.accepted ?? {}).includes(account.displayName)
           "
         >
-          신청하기
-        </v-btn>
+          이미 다른 동아리에 가입했습니다.
+        </v-alert>
+        <div
+          v-else-if="
+            !Object.keys(clubInfo.joining ?? {}).includes(
+              account.displayName
+            ) &&
+            !Object.keys(clubInfo.accepted ?? {}).includes(account.displayName)
+          "
+        >
+          <v-text-field
+            v-model="joining.name"
+            variant="outlined"
+            disabled
+            label="학번과 이름"
+          ></v-text-field>
+          <v-text-field
+            v-model="joining.email"
+            variant="outlined"
+            disabled
+            label="학교 이메일"
+          ></v-text-field>
+          <v-text-field
+            v-model="joining.phone"
+            variant="outlined"
+            label="전화번호"
+          ></v-text-field>
+          <v-textarea
+            v-if="clubInfo.getWhyJoined"
+            v-model="joining.whyJoined"
+            variant="outlined"
+            placeholder="자기소개 부분 (필수)"
+          ></v-textarea>
+
+          <v-btn
+            block
+            variant="tonal"
+            color="yellow-darken-4"
+            @click="join"
+            :disabled="
+              !joining.phone ||
+              (clubInfo.getWhyJoined ? !joining.whyJoined : false)
+            "
+          >
+            신청하기
+          </v-btn>
+        </div>
+        <v-alert
+          v-else-if="
+            Object.keys(clubInfo.joining ?? {}).includes(account.displayName)
+          "
+        >
+          신청이 되었습니다.
+        </v-alert>
+        <v-alert
+          v-else-if="
+            Object.keys(clubInfo.accepted ?? {}).includes(account.displayName)
+          "
+        >
+          동아리에 합격했습니다.
+        </v-alert>
       </div>
-      <v-alert
-        v-else-if="
-          Object.keys(clubInfo.joining ?? {}).includes(account.displayName)
-        "
-      >
-        신청이 되었습니다.
-      </v-alert>
-      <v-alert
-        v-else-if="
-          Object.keys(clubInfo.accepted ?? {}).includes(account.displayName)
-        "
-      >
-        동아리에 합격했습니다.
-      </v-alert>
     </div>
   </div>
 </template>
@@ -325,6 +323,8 @@ const joining = ref({
 const account = ref({});
 const alreadyJoined = ref("");
 const question = ref("");
+const typeofAccount = ref("");
+const isClubJoiningFinished = ref(false);
 
 const { $auth, $db } = useNuxtApp();
 const route = useRoute();
@@ -345,7 +345,7 @@ function join() {
     `member/${account.value.displayName}/notification`
   );
   push(notifRef, {
-    message: `${clubName} 동아리에 지원했습니다. 동아리 부장이 합격 또는 불합격의 여부는 선택 후 바로 알림이 옵니다.`,
+    message: `${clubName} 동아리에 지원했습니다. 동아리 합격 또는 불합격의 여부는 동아리 부장이 결정한 후 알림을 줍니다.`,
   });
 }
 
@@ -374,6 +374,19 @@ onMounted(async () => {
         alreadyJoined.value = snapshot.val();
       }
     );
+
+    onValue(
+      dbRef($db, `everyone/${account.value.displayName}/type`),
+      (snapshot) => {
+        typeofAccount.value = snapshot.val();
+      }
+    );
   });
+
+  const today = new Date();
+  const endDate = new Date(clubInfo.value.end);
+  endDate.setDate(endDate.getDate() + 1);
+
+  isClubJoiningFinished.value = today > endDate;
 });
 </script>

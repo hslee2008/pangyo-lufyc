@@ -2,7 +2,7 @@
   <v-app>
     <NuxtLayout>
       <v-main>
-        <div class="d-flex justify-center mt-4">
+        <div class="d-flex justify-center">
           <NuxtPage />
         </div>
 
@@ -33,7 +33,7 @@
         <span>계정</span>
       </v-btn>
 
-      <v-btn v-if="account.type === 'teacher'" to="/admin">
+      <v-btn v-if="typeofAccount === 'teacher'" to="/admin">
         <v-icon>mdi-security</v-icon>
 
         <span>Admin</span>
@@ -43,23 +43,25 @@
 </template>
 
 <script setup>
-import {
-  GoogleAuthProvider,
-  signInWithPopup,
-  onAuthStateChanged,
-} from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 
-const { $auth } = useNuxtApp();
+const { $auth, $db } = useNuxtApp();
 
 const router = useRouter();
 
 const account = ref({});
+const typeofAccount = ref("member");
 
 onMounted(() => {
-  onAuthStateChanged($auth, (user) => (account.value = user));
+  onAuthStateChanged($auth, (user) => {
+    account.value = user;
+
+    const type = dbRef($db, `/everyone/${user.displayName}/type`);
+    onValue(type, (snapshot) => (typeofAccount.value = snapshot.val()));
+  });
 });
 
 useHead({
-  title: "찾아줄게, 너의 동아리",
+  title: "찾아줄게! 너의 동아리",
 });
 </script>

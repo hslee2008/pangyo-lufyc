@@ -73,21 +73,28 @@
           </template>
 
           <template v-slot:default="{ isActive }">
-            <v-card title="문의하기">
+            <v-card>
+              <v-card-title class="text-center mt-2">문의하기</v-card-title>
               <v-card-text>
-                <v-text-field
+                <v-textarea
                   v-model="question"
                   variant="outlined"
                   placeholder="예) 생기부 잘 써주나요?"
                   append-inner-icon="mdi-send"
                   @click:appendInner="send"
-                ></v-text-field>
+                ></v-textarea>
               </v-card-text>
 
               <v-card-actions>
                 <v-spacer></v-spacer>
 
-                <v-btn text="닫기" @click="isActive.value = false"></v-btn>
+                <v-btn
+                  text="닫기"
+                  block
+                  @click="isActive.value = false"
+                ></v-btn>
+
+                <v-spacer></v-spacer>
               </v-card-actions>
             </v-card>
           </template>
@@ -159,7 +166,7 @@
 
       <br /><br />
 
-      <v-img :src="clubInfo.poster" class="rounded-lg mx-10 elevation-10"  />
+      <v-img :src="clubInfo.poster" class="rounded-lg mx-10 elevation-10" />
       <div class="d-flex justify-center mt-3">
         <v-btn variant="tonal" class="mt-3" download :href="clubInfo.poster">
           <v-icon start>mdi-download</v-icon> 다운로드 받기

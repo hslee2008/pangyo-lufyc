@@ -20,7 +20,6 @@
       closable-chips
       multiple
       variant="outlined"
-      class="mt-4"
       label="학과로 동아리 검색하기"
     >
       <template v-slot:chip="{ props, item }">
@@ -62,7 +61,7 @@
               const endDate = new Date(a.end);
               endDate.setDate(endDate.getDate() + 1);
 
-             return today <= endDate;
+              return today <= endDate;
             } else {
               return true;
             }
@@ -78,12 +77,9 @@
             if (a.name.includes(searchByName)) return true;
           })"
         :key="item.name"
+        class="d-flex justify-center"
       >
-        <v-card
-          :to="`/clubinfo?clubname=${item.name}`"
-          width="150"
-          elevation="20"
-        >
+        <v-card :to="`/clubinfo?clubname=${item.name}`" width="150">
           <v-img
             :src="
               item?.image ??
@@ -94,21 +90,12 @@
             height="150"
             cover
           >
-            <v-card-title class="text-white" style="margin-bottom: -10px">
+            <v-card-title
+              class="text-white text-center"
+              style="margin-bottom: -5px; font-size: 16px"
+            >
               <mark>{{ item.name }}</mark>
             </v-card-title>
-            <v-card-subtitle class="text-white mb-3">
-              <mark>
-                {{
-                  Object.keys(item.joining ?? {}).length /
-                  (item.memberNumber == undefined
-                    ? 20
-                    : item.memberNumber -
-                      Object.keys(item.accepted ?? {}).length)
-                }}
-                대 1
-              </mark>
-            </v-card-subtitle>
           </v-img>
 
           <v-card-actions>

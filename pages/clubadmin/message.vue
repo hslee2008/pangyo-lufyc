@@ -24,7 +24,7 @@
 
     <br />
 
-    <div>
+    <div v-if="clubInfo.message">
       <v-card v-for="(item, i) in clubInfo.message" :key="i">
         <v-card-title>{{ i }}</v-card-title>
         <v-card-text>
@@ -42,6 +42,11 @@
             @click:appendInner="() => send(item, i)"
           ></v-text-field>
         </v-card-text>
+      </v-card>
+    </div>
+    <div v-else>
+      <v-card elevation="0">
+        <v-card-title class="text-center">문의사항이 없습니다</v-card-title>
       </v-card>
     </div>
   </div>
@@ -63,9 +68,6 @@ const clubInfo = ref({
   getWhyJoined: false,
 });
 const account = ref({});
-
-const see1 = ref(true);
-const see2 = ref(true);
 
 const answer = ref("");
 

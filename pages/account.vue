@@ -6,7 +6,7 @@
 
     <br />
 
-    <v-table class="rounded-lg">
+    <v-table class="rounded-lg" style="border: 1px solid black">
       <thead style="background-color: #87ceeb">
         <tr>
           <th class="text-left">카테고리</th>
@@ -37,37 +37,52 @@
 
     <br /><br />
 
-    <h2 class="text-center">사이트 알림</h2>
-    <br />
-    <v-list v-if="notification" bg-color="grey-lighten-3">
-      <v-list-item v-for="(notif, i) in notification" :key="i" class="mb-3">
-        <p>{{ notif.message }}</p>
-        <v-btn
-          @click="deleteNotification(i)"
-          block
-          variant="tonal"
-          class="mt-2"
-        >
-          <v-icon start>mdi-trash-can</v-icon> 지우기
-        </v-btn>
-      </v-list-item>
-    </v-list>
-    <div v-else>
-      <v-alert class="text-center">사이트 알림이 없습니다.</v-alert>
+    <div>
+      <h2 class="text-center">사이트 알림</h2>
+      <br />
+      <v-list v-if="notification" bg-color="grey-lighten-3">
+        <v-list-item v-for="(notif, i) in notification" :key="i" class="mb-3">
+          <p>{{ notif.message }}</p>
+          <v-btn
+            @click="deleteNotification(i)"
+            block
+            variant="tonal"
+            class="mt-2"
+          >
+            <v-icon start>mdi-trash-can</v-icon> 지우기
+          </v-btn>
+        </v-list-item>
+      </v-list>
+      <div v-else>
+        <v-alert class="text-center">사이트 알림이 없습니다.</v-alert>
+      </div>
     </div>
 
     <br /><br />
 
-    <h2 class="text-center">동아리 알림</h2>
-    <br />
-    <v-list v-if="notification" bg-color="grey-lighten-3" lines="two">
-      <v-list-item v-for="(notif, i) in clubNotification" :key="i" class="mb-3">
-        <v-list-item-title>{{ notif.date }} </v-list-item-title>
-        <v-list-item-subtitle>{{ notif.message }}</v-list-item-subtitle>
-      </v-list-item>
-    </v-list>
-    <div v-else>
-      <v-alert class="text-center">알림이 없습니다.</v-alert>
+    <div v-if="clubName">
+      <h2 class="text-center">
+        <span class="text-decoration-underline">{{ clubName }}</span>
+        동아리 알림
+      </h2>
+
+      <br />
+
+      <v-list v-if="notification" bg-color="grey-lighten-3" lines="two">
+        <v-list-item
+          v-for="(notif, i) in clubNotification"
+          :key="i"
+          :class="
+            Object.keys(clubNotification ?? {}).indexOf(i) !== 0 ? `mb-3` : ''
+          "
+        >
+          <v-list-item-title>{{ notif.date }} </v-list-item-title>
+          <v-list-item-subtitle>{{ notif.message }}</v-list-item-subtitle>
+        </v-list-item>
+      </v-list>
+      <div v-else>
+        <v-alert class="text-center">알림이 없습니다.</v-alert>
+      </div>
     </div>
 
     <br /><br /><br />
@@ -89,6 +104,7 @@ const account = ref({});
 const type = ref("");
 const notification = ref({});
 const clubNotification = ref([]);
+const clubName = ref("");
 
 const logout = () => {
   router.push("/");
@@ -124,6 +140,9 @@ onMounted(() => {
       onValue(dbRef($db, `/member/${user.displayName}/club`), (snapshot) => {
         const data = snapshot.val();
         const clubNotificationRef = dbRef($db, `/clubs/${data}/notification`);
+
+        clubName.value = data;
+
         onValue(clubNotificationRef, (snapshot) => {
           const data = snapshot.val();
           clubNotification.value = data;

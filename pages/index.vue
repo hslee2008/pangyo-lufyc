@@ -43,7 +43,7 @@
           "
         >
           <p>Copyright © LUFYC 2024 — All rights reserved</p>
-          <p>버전 v0.0.5 · 개발자 이현승</p>
+          <p>버전 v0.0.6 · 개발자 이현승</p>
         </div>
       </v-parallax>
 
@@ -130,7 +130,7 @@ const login = async () => {
     onAuthStateChanged($auth, async (user) => {
       account.value = user;
 
-      if (!user?.email?.includes("pangyo.hs.kr")) return;
+      //if (!user?.email?.includes("pangyo.hs.kr")) return;
 
       if (/^\d+$/.test(user?.email?.slice(0, user?.email?.indexOf("@")))) {
         const everyone = dbRef($db, `everyone/${user.displayName}`);

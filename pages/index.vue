@@ -43,7 +43,7 @@
           "
         >
           <p>Copyright © LUFYC 2024 — All rights reserved</p>
-          <p>버전 v0.0.6 · 개발자 이현승</p>
+          <p>버전 v0.0.7 · 개발자 이현승</p>
         </div>
       </v-parallax>
 

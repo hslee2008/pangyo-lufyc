@@ -13,6 +13,9 @@
     <v-bottom-navigation
       v-if="account"
       color="skyblue"
+      height="50"
+      elevation="10"
+      grow
       selected-class="text-blue"
     >
       <v-btn to="/">

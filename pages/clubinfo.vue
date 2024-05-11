@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-4">
+  <div class="mx-4" style="width: 100%">
     <br />
 
     <div
@@ -116,7 +116,7 @@
 
     <h1 class="text-center">{{ clubName }}</h1>
     <h3 class="text-center">
-      {{ clubInfo.leader }} /
+      {{ clubInfo.leader }} ·
       {{ clubInfo.coleader }}
     </h3>
 
@@ -143,8 +143,8 @@
         <tbody>
           <tr>
             <td>관련 학과</td>
-            <td>
-              <v-chip v-for="major in clubInfo.major" size="small">
+            <td class="py-2">
+              <v-chip v-for="major in clubInfo.major" size="small" class="ma-1">
                 {{ major }}
               </v-chip>
             </td>
@@ -299,6 +299,33 @@
           "
         >
           신청이 되었습니다.
+          <br /><br />
+          <v-dialog max-width="500">
+            <template v-slot:activator="{ props: activatorProps }">
+              <v-btn
+                v-bind="activatorProps"
+                color="red"
+                text="등록 취소하기"
+                variant="flat"
+              ></v-btn>
+            </template>
+
+            <template v-slot:default="{ isActive }">
+              <v-card title="동아리 등록 취소 확인">
+                <v-card-text> 정말로 동아리 취소를 원합니까? </v-card-text>
+
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+
+                  <v-btn text="아니요" @click="isActive.value = false"></v-btn>
+
+                  <v-btn text="네" @click="cancelClub(isActive)"></v-btn>
+
+                  <v-spacer />
+                </v-card-actions>
+              </v-card>
+            </template>
+          </v-dialog>
         </v-alert>
         <v-alert
           v-else-if="
@@ -400,6 +427,27 @@ function send() {
   );
   push(messageRef, question.value);
   question.value = "";
+}
+
+function cancelClub(isActive) {
+  const clubRef = dbRef(
+    $db,
+    `clubs/${clubName}/joining/${account.value.displayName}`
+  );
+  set(clubRef, null);
+
+  const accountRef = dbRef($db, `member/${account.value.displayName}/joined`);
+  set(accountRef, null);
+
+  const notifRef = dbRef(
+    $db,
+    `member/${account.value.displayName}/notification`
+  );
+  push(notifRef, {
+    message: `${clubName} 동아리 지원을 취소했습니다.`,
+  });
+
+  isActive.value = false;
 }
 
 onMounted(async () => {

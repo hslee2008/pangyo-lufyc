@@ -30,6 +30,12 @@
         <span>동아리</span>
       </v-btn>
 
+      <v-btn to="/write">
+        <v-icon>mdi-pencil</v-icon>
+
+        <span>활동기록</span>
+      </v-btn>
+
       <v-btn to="/account">
         <v-icon>mdi-account</v-icon>
 

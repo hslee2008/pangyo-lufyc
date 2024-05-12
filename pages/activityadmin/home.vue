@@ -1,0 +1,211 @@
+<template>
+  <div style="width: 100%" class="mx-4">
+    <br />
+
+    <h1 class="text-center">{{ clubName }}</h1>
+    <h3 class="text-center">
+      {{ clubInfo.leader }} ·
+      {{ clubInfo.coleader }}
+    </h3>
+
+    <br />
+
+    <v-dialog max-width="500">
+      <template v-slot:activator="{ props: activatorProps }">
+        <div class="d-flex justify-center">
+          <v-btn
+            v-if="
+              account.displayName === clubInfo.leader.replaceAll(' ', '') ||
+              account.displayName === clubInfo.coleader.replaceAll(' ', '')
+            "
+            v-bind="activatorProps"
+            color="surface-variant"
+            text="글쓰기"
+            prepend-icon="mdi-pencil"
+            variant="outlined"
+          ></v-btn>
+        </div>
+      </template>
+
+      <template v-slot:default="{ isActive }">
+        <v-card :title="`활동 기록하기 (${new Date().toLocaleDateString()})`">
+          <v-card-text>
+            <v-select
+              v-model="newActivity.writer"
+              :items="['부장', '차장']"
+              variant="outlined"
+            ></v-select>
+            <v-textarea
+              v-model="newActivity.content"
+              variant="outlined"
+            ></v-textarea>
+            <v-file-input
+              label="동아리 사진 업로드 (여러 개)"
+              chips
+              multiple
+              variant="outlined"
+              @update:model-value="upload($event)"
+            ></v-file-input>
+
+            <div class="d-flex ga-4">
+              <v-img
+                v-for="(image, i) in newActivity.images"
+                :key="i"
+                :src="image"
+              >
+              </v-img>
+            </div>
+          </v-card-text>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+
+            <v-btn
+              text="등록하기"
+              color="primary"
+              @click="update(isActive)"
+            ></v-btn>
+            <v-btn
+              text="취소하기"
+              color="error"
+              @click="isActive.value = false"
+            ></v-btn>
+
+            <v-spacer></v-spacer>
+          </v-card-actions>
+        </v-card>
+      </template>
+    </v-dialog>
+
+    <br />
+
+    <v-table>
+      <thead>
+        <tr style="background-color: skyblue">
+          <th class="text-left">날짜</th>
+          <th class="text-left">글쓴이</th>
+        </tr>
+      </thead>
+      <tbody>
+        <template v-for="(activity, date) in activities" :key="date">
+          <tr v-for="(item, writer) in activity" :key="writer">
+            <td>
+              {{ date.replaceAll("_", "/") }}
+
+              <v-dialog max-width="500">
+                <template v-slot:activator="{ props: activatorProps }">
+                  <v-btn v-bind="activatorProps" variant="tonal" class="ml-3">
+                    열기
+                  </v-btn>
+                </template>
+
+                <template v-slot:default="{ isActive }">
+                  <v-card :title="`활동 기록 (${date.replaceAll('_', '/')})`">
+                    <v-card-text>
+                      {{ item.content }}
+
+                      <br /><br />
+
+                      <v-img
+                        v-for="image in item.images"
+                        :key="image"
+                        :src="image"
+                      ></v-img>
+                    </v-card-text>
+
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+
+                      <v-btn
+                        text="닫기"
+                        color="error"
+                        block
+                        @click="isActive.value = false"
+                      ></v-btn>
+
+                      <v-spacer></v-spacer>
+                    </v-card-actions>
+                  </v-card>
+                </template>
+              </v-dialog>
+            </td>
+            <td>{{ writer }}</td>
+          </tr>
+        </template>
+      </tbody>
+    </v-table>
+  </div>
+</template>
+
+<script setup>
+import { onAuthStateChanged } from "firebase/auth";
+import { ref as sRef, uploadBytes, getDownloadURL } from "firebase/storage";
+
+const clubInfo = ref({
+  leader: "",
+  coleader: "",
+  description: "",
+  image: "",
+  major: "",
+  memberNumber: 20,
+  how: "면접",
+  start: "2024-05-01",
+  end: "2024-05-16",
+  getWhyJoined: false,
+});
+const newActivity = ref({
+  writer: "",
+  content: "",
+  images: [],
+});
+const activities = ref([]);
+const account = ref({});
+const tab = ref(1);
+
+const { $auth, $db, $storage } = useNuxtApp();
+const route = useRoute();
+const router = useRouter();
+const clubName = route.query.clubname;
+
+onMounted(async () => {
+  const clubRef = dbRef($db, `clubs/${clubName}`);
+  await onValue(clubRef, (snapshot) => (clubInfo.value = snapshot.val()));
+
+  const activityRef = dbRef($db, `activity/${clubName}`);
+  await onValue(activityRef, (snapshot) => (activities.value = snapshot.val()));
+
+  onAuthStateChanged($auth, (user) => {
+    account.value = user;
+  });
+});
+
+const update = (isActive) => {
+  const clubRef = dbRef(
+    $db,
+    `/activity/${clubName}/${new Date()
+      .toLocaleDateString()
+      .replaceAll("/", "_")}/${newActivity.value.writer}`
+  );
+  set(clubRef, newActivity.value);
+  isActive.value = false;
+  newActivity.value = {
+    writer: "",
+    content: "",
+    images: [],
+  };
+};
+
+const upload = (f) => {
+  console.log(f);
+
+  f.forEach((i) => {
+    const storageRef = sRef($storage, `activity/${clubName}/${i.name}`);
+
+    uploadBytes(storageRef, i).then((snapshot) => {
+      getDownloadURL(snapshot.ref).then((downloadURL) => {
+        newActivity.value.images.push(downloadURL);
+      });
+    });
+  });
+};
+</script>

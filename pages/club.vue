@@ -93,16 +93,17 @@
         class="d-flex justify-center"
       >
         <v-card :to="`/clubinfo?clubname=${item.name}`" width="150">
-          <v-img
-            :src="
-              item?.image ??
-              'https://firebasestorage.googleapis.com/v0/b/thinkforall-linkall.appspot.com/o/school%2FPGHS.png?alt=media&token=1a077cc3-d8f0-4994-8d62-09d68ef49739'
-            "
-            class="align-end"
-            gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-            height="150"
-            cover
-          ></v-img>
+          <div style="background-color: white">
+            <v-img
+              :src="
+                item?.image ??
+                'https://firebasestorage.googleapis.com/v0/b/thinkforall-linkall.appspot.com/o/school%2FPGHS.png?alt=media&token=1a077cc3-d8f0-4994-8d62-09d68ef49739'
+              "
+              class="align-end"
+              height="150"
+              cover
+            ></v-img>
+          </div>
 
           <h4 class="text-center mt-3">
             <mark>{{ item.name }}</mark>

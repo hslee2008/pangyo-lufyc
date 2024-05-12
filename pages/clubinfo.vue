@@ -59,48 +59,44 @@
       </div>
     </div>
 
-    <v-layout-item model-value position="bottom" class="text-end" size="88">
-      <div class="ma-4">
-        <v-dialog max-width="300">
-          <template v-slot:activator="{ props: activatorProps }">
-            <v-btn
-              v-bind="activatorProps"
-              icon="mdi-message"
-              size="large"
-              color="primary"
-              elevation="8"
-            />
-          </template>
+    <v-dialog max-width="300">
+      <template v-slot:activator="{ props: activatorProps }">
+        <v-fab
+          v-if="Object.keys(clubInfo).length > 3"
+          v-bind="activatorProps"
+          icon="mdi-frequently-asked-questions"
+          size="large"
+          color="primary"
+          elevation="8"
+          location="bottom end"
+          app
+          appear
+        />
+      </template>
 
-          <template v-slot:default="{ isActive }">
-            <v-card>
-              <v-card-title class="text-center mt-2">문의하기</v-card-title>
-              <v-card-text>
-                <v-textarea
-                  v-model="question"
-                  variant="outlined"
-                  placeholder="예) 생기부 잘 써주나요?"
-                  append-inner-icon="mdi-send"
-                  @click:appendInner="send"
-                ></v-textarea>
-              </v-card-text>
+      <template v-slot:default="{ isActive }">
+        <v-card>
+          <v-card-title class="text-center mt-2">문의하기</v-card-title>
+          <v-card-text>
+            <v-textarea
+              v-model="question"
+              variant="outlined"
+              placeholder="생기부 잘 써주나요?"
+              append-inner-icon="mdi-send"
+              @click:appendInner="send"
+            ></v-textarea>
+          </v-card-text>
 
-              <v-card-actions>
-                <v-spacer></v-spacer>
+          <v-card-actions>
+            <v-spacer></v-spacer>
 
-                <v-btn
-                  text="닫기"
-                  block
-                  @click="isActive.value = false"
-                ></v-btn>
+            <v-btn text="닫기" block @click="isActive.value = false"></v-btn>
 
-                <v-spacer></v-spacer>
-              </v-card-actions>
-            </v-card>
-          </template>
-        </v-dialog>
-      </div>
-    </v-layout-item>
+            <v-spacer></v-spacer>
+          </v-card-actions>
+        </v-card>
+      </template>
+    </v-dialog>
 
     <div class="pa-4 rounded-lg d-flex justify-center">
       <img
@@ -130,7 +126,7 @@
 
     <v-alert v-if="Object.keys(clubInfo ?? {}).length <= 3">
       <v-empty-state
-        icon="mdi-magnify"
+        icon="mdi-information-off"
         text="아직까지 동아리 부장 또는 차장이 동아리 정보를 설정을 하지 않았기 때문에 볼 수 없습니다."
         title="동아리 정보 부족"
       ></v-empty-state>

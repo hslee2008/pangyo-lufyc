@@ -20,24 +20,26 @@
             {{ type === "teacher" ? "선생님" : "학생" }}
           </td>
         </tr>
-        <tr>
-          <td>학번</td>
-          <td>
-            {{ getInfoFromName(account?.displayName).number }}
-          </td>
-        </tr>
-        <tr>
-          <td>이름</td>
-          <td>
-            {{ getInfoFromName(account?.displayName).name }}
-          </td>
-        </tr>
+        <div v-if="type !== 'teacher'">
+          <tr>
+            <td>학번</td>
+            <td>
+              {{ getInfoFromName(account?.displayName).number }}
+            </td>
+          </tr>
+          <tr>
+            <td>이름</td>
+            <td>
+              {{ getInfoFromName(account?.displayName).name }}
+            </td>
+          </tr>
+        </div>
       </tbody>
     </v-table>
 
-    <br /><br />
+    <div v-if="type !== 'teacher'">
+      <br /><br />
 
-    <div>
       <h2 class="text-center">사이트 알림</h2>
       <br />
       <v-list v-if="notification" bg-color="grey-lighten-3">
@@ -56,9 +58,9 @@
       <div v-else>
         <v-alert class="text-center">사이트 알림이 없습니다.</v-alert>
       </div>
-    </div>
 
-    <br /><br />
+      <br /><br />
+    </div>
 
     <div v-if="clubName">
       <h2 class="text-center">

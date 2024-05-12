@@ -28,7 +28,7 @@
       </template>
 
       <template v-slot:default="{ isActive }">
-        <v-card :title="`활동 기록하기 (${new Date().toLocaleDateString()})`">
+        <v-card :title="`활동 기록하기`">
           <v-card-text>
             <v-select
               v-model="newActivity.writer"
@@ -87,6 +87,7 @@
     <v-table>
       <thead>
         <tr style="background-color: skyblue">
+          <th class="text-left">열기</th>
           <th class="text-left">날짜</th>
           <th class="text-left">글쓴이</th>
         </tr>
@@ -95,11 +96,9 @@
         <template v-for="(activity, date) in activities" :key="date">
           <tr v-for="(item, writer) in activity" :key="writer">
             <td>
-              {{ date.replaceAll("_", "/") }}
-
               <v-dialog max-width="500">
                 <template v-slot:activator="{ props: activatorProps }">
-                  <v-btn v-bind="activatorProps" variant="tonal" class="ml-3">
+                  <v-btn v-bind="activatorProps" variant="tonal" class="mr-5">
                     열기
                   </v-btn>
                 </template>
@@ -115,6 +114,7 @@
                         v-for="image in item.images"
                         :key="image"
                         :src="image"
+                        class="my-2"
                       ></v-img>
                     </v-card-text>
 
@@ -134,6 +134,7 @@
                 </template>
               </v-dialog>
             </td>
+            <td>{{ date.replaceAll("_", "/") }}</td>
             <td>{{ writer }}</td>
           </tr>
         </template>
@@ -162,7 +163,7 @@ const newActivity = ref({
   writer: "",
   content: "",
   images: [],
-  date: ""
+  date: "",
 });
 const activities = ref([]);
 const account = ref({});
@@ -186,8 +187,8 @@ const dates = [
   "9/27",
   "10/25",
   "11/01",
-  "11/15"
-]
+  "11/15",
+];
 
 onMounted(async () => {
   const clubRef = dbRef($db, `clubs/${clubName}`);
@@ -204,9 +205,9 @@ onMounted(async () => {
 const update = (isActive) => {
   const clubRef = dbRef(
     $db,
-    `/activity/${clubName}/${new Date()
-      .toLocaleDateString()
-      .replaceAll("/", "_")}/${newActivity.value.writer}`
+    `/activity/${clubName}/${newActivity.value.date.replaceAll("/", "_")}/${
+      newActivity.value.writer
+    }`
   );
   set(clubRef, newActivity.value);
   isActive.value = false;
@@ -214,6 +215,7 @@ const update = (isActive) => {
     writer: "",
     content: "",
     images: [],
+    date: "",
   };
 };
 

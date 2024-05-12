@@ -18,7 +18,7 @@
 
     <h1 class="text-center">{{ clubName }}</h1>
     <h3 class="text-center">
-      {{ clubInfo.leader }} /
+      {{ clubInfo.leader }} ·
       {{ clubInfo.coleader }}
     </h3>
 

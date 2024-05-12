@@ -27,10 +27,16 @@
       </template>
     </v-autocomplete>
 
-    <v-checkbox
-      v-model="onlySeeCanJoin"
-      label="모집 중인 동아리만 보기"
-    ></v-checkbox>
+    <div class="d-flex ga-3">
+      <v-checkbox
+        v-model="onlySeeCanJoin"
+        label="모집 중인 동아리만 보기"
+      ></v-checkbox>
+      <v-checkbox
+        v-model="onlySeeExistInfo"
+        label="정보 등록된 동아리만 보기"
+      ></v-checkbox>
+    </div>
 
     <v-radio-group v-model="std">
       <v-radio value="popular" label="지원자 수 많은 동아리"></v-radio>
@@ -67,6 +73,13 @@
             }
           })
           .filter((a) => {
+            if (onlySeeExistInfo) {
+              return Object.keys(a).length > 3;
+            } else {
+              return true;
+            }
+          })
+          .filter((a) => {
             if (!searchByMajor.length) return true;
             if (searchByMajor) {
               if (!Object.keys(a).includes('major')) return false;
@@ -89,15 +102,11 @@
             gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
             height="150"
             cover
-          >
-            <v-card-title
-              class="text-white text-center"
-              style="margin-bottom: -5px; font-size: 16px"
-            >
-              <mark>{{ item.name }}</mark>
-            </v-card-title>
-          </v-img>
+          ></v-img>
 
+          <h4 class="text-center mt-3">
+            <mark>{{ item.name }}</mark>
+          </h4>
           <v-card-actions>
             부장: {{ item.leader }} <br />
             차장: {{ item.coleader }}
@@ -115,6 +124,7 @@ const list = ref([]);
 const std = ref("popular");
 
 const onlySeeCanJoin = ref(false);
+const onlySeeExistInfo = ref(false);
 
 const searchByName = ref("");
 const searchByMajor = ref([]);

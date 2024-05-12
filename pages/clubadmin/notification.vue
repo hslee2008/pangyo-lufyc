@@ -18,7 +18,7 @@
 
     <h1 class="text-center">{{ clubName }}</h1>
     <h3 class="text-center">
-      {{ clubInfo.leader }} /
+      {{ clubInfo.leader }} ·
       {{ clubInfo.coleader }}
     </h3>
 
@@ -30,7 +30,7 @@
         <v-list-item-subtitle>{{ item.message }}</v-list-item-subtitle>
       </v-list-item>
     </v-list>
-    
+
     <br />
 
     <div>

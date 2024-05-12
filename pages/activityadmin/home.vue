@@ -35,6 +35,11 @@
               :items="['부장', '차장']"
               variant="outlined"
             ></v-select>
+            <v-select
+              v-model="newActivity.date"
+              :items="dates"
+              variant="outlined"
+            ></v-select>
             <v-textarea
               v-model="newActivity.content"
               variant="outlined"
@@ -100,7 +105,7 @@
                 </template>
 
                 <template v-slot:default="{ isActive }">
-                  <v-card :title="`활동 기록 (${date.replaceAll('_', '/')})`">
+                  <v-card :title="`활동 기록 ${item.date}`">
                     <v-card-text>
                       {{ item.content }}
 
@@ -157,6 +162,7 @@ const newActivity = ref({
   writer: "",
   content: "",
   images: [],
+  date: ""
 });
 const activities = ref([]);
 const account = ref({});
@@ -166,6 +172,22 @@ const { $auth, $db, $storage } = useNuxtApp();
 const route = useRoute();
 const router = useRouter();
 const clubName = route.query.clubname;
+
+const dates = [
+  "3/22",
+  "4/5",
+  "5/10",
+  "5/24",
+  "6/21",
+  "7/12",
+  "8/30",
+  "9/06",
+  "9/13",
+  "9/27",
+  "10/25",
+  "11/01",
+  "11/15"
+]
 
 onMounted(async () => {
   const clubRef = dbRef($db, `clubs/${clubName}`);

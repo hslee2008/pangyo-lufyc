@@ -20,7 +20,7 @@
             {{ type === "teacher" ? "선생님" : "학생" }}
           </td>
         </tr>
-        <div v-if="type !== 'teacher'">
+        <template v-if="type !== 'teacher'">
           <tr>
             <td>학번</td>
             <td>
@@ -33,7 +33,7 @@
               {{ getInfoFromName(account?.displayName).name }}
             </td>
           </tr>
-        </div>
+        </template>
       </tbody>
     </v-table>
 

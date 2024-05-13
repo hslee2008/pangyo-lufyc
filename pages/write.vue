@@ -11,6 +11,7 @@
         v-for="item in list"
         :key="item.name"
         :to="`/activityadmin/home/?clubname=${item.name}`"
+        class="my-1"
       >
         <template v-slot:prepend>
           <v-avatar color="grey-lighten-1">

@@ -106,16 +106,56 @@
                 <template v-slot:default="{ isActive }">
                   <v-card :title="`활동 기록 ${item.date}`">
                     <v-card-text>
-                      {{ item.content }}
+                      <div v-if="!edit">
+                        {{ item.content }}
+
+                        <br /><br />
+
+                        <v-img
+                          v-for="image in item.images"
+                          :key="image"
+                          :src="image"
+                          class="my-2"
+                        ></v-img>
+                      </div>
+                      <div v-else>
+                        <v-textarea
+                          v-model="activities[date][writer].content"
+                          variant="outlined"
+                        ></v-textarea>
+
+                        <div v-if="item.images">
+                          <br /><br />
+
+                          <v-img
+                            v-for="image in item.images"
+                            :key="image"
+                            :src="image"
+                            class="my-2"
+                          ></v-img>
+
+                          <v-alert>이미지는 수정할 수 없습니다.</v-alert>
+                        </div>
+
+                        <v-btn
+                          color="primary"
+                          variant="tonal"
+                          @click="editActivity"
+                        >
+                          업데이트
+                        </v-btn>
+                      </div>
 
                       <br /><br />
 
-                      <v-img
-                        v-for="image in item.images"
-                        :key="image"
-                        :src="image"
-                        class="my-2"
-                      ></v-img>
+                      <v-btn
+                        v-if="!edit"
+                        color="primary"
+                        variant="tonal"
+                        @click="edit = true"
+                      >
+                        <v-icon start>mdi-pencil</v-icon> 수정하기
+                      </v-btn>
                     </v-card-text>
 
                     <v-card-actions>
@@ -167,7 +207,7 @@ const newActivity = ref({
 });
 const activities = ref([]);
 const account = ref({});
-const tab = ref(1);
+const edit = ref(false);
 
 const { $auth, $db, $storage } = useNuxtApp();
 const route = useRoute();
@@ -217,6 +257,13 @@ const update = (isActive) => {
     images: [],
     date: "",
   };
+};
+
+const editActivity = () => {
+  const activityRef = dbRef($db, `/activity/${clubName}`);
+  set(activityRef, activities.value)
+
+  edit.value = false;
 };
 
 const upload = (f) => {

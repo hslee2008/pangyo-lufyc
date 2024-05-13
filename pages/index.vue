@@ -42,8 +42,8 @@
             opacity: 0.6;
           "
         >
-          <p>Copyright © LUFYC 2024 — All rights reserved</p>
-          <p>버전 v0.0.13</p>
+          <p>Copyright © 이현승 2024 — All rights reserved</p>
+          <p>버전 v0.0.14</p>
         </div>
       </v-parallax>
 

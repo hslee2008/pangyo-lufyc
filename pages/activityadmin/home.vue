@@ -115,7 +115,7 @@
                           v-for="image in item.images"
                           :key="image"
                           :src="image"
-                          class="my-2"
+                          class="my-2 rounded-lg"
                         ></v-img>
                       </div>
                       <div v-else>
@@ -131,27 +131,29 @@
                             v-for="image in item.images"
                             :key="image"
                             :src="image"
-                            class="my-2"
+                            class="my-2 rounded-lg"
                           ></v-img>
 
                           <v-alert>이미지는 수정할 수 없습니다.</v-alert>
                         </div>
-
-                        <v-btn
-                          color="primary"
-                          variant="tonal"
-                          @click="editActivity"
-                        >
-                          업데이트
-                        </v-btn>
                       </div>
 
                       <br /><br />
 
                       <v-btn
+                      v-if="edit"
+                        color="primary"
+                        variant="tonal"
+                        block
+                        @click="editActivity"
+                      >
+                        업데이트
+                      </v-btn>
+                      <v-btn
                         v-if="!edit"
                         color="primary"
                         variant="tonal"
+                        block
                         @click="edit = true"
                       >
                         <v-icon start>mdi-pencil</v-icon> 수정하기
@@ -261,7 +263,7 @@ const update = (isActive) => {
 
 const editActivity = () => {
   const activityRef = dbRef($db, `/activity/${clubName}`);
-  set(activityRef, activities.value)
+  set(activityRef, activities.value);
 
   edit.value = false;
 };

@@ -135,7 +135,7 @@
       <v-table style="border: 1px solid black" class="rounded-lg">
         <thead>
           <tr style="background-color: skyblue">
-            <th class="text-left">카테고리</th>
+            <th class="text-left" style="min-width: 100px">카테고리</th>
             <th class="text-left">정보</th>
           </tr>
         </thead>
@@ -227,106 +227,108 @@
           <div class="d-flex justify-center">
             <v-btn
               v-bind="props"
-              text="더 자세한 경쟁률 확인하기"
+              text="자세한 경쟁률"
+              variant="outlined"
               class="mt-5"
-              style="background-color: skyblue"
             ></v-btn>
           </div>
         </template>
 
-        <v-card class="">
-          <v-table>
-            <thead>
-              <tr style="background-color: skyblue">
-                <th class="text-left">카테고리</th>
-                <th class="text-left">정보</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>최대 모집 인원 수</td>
-                <td>{{ clubInfo.memberNumber }}</td>
-              </tr>
-              <tr>
-                <td>남은 인원 수</td>
-                <td>
-                  {{
-                    clubInfo.memberNumber -
-                    Object.keys(clubInfo.accepted ?? {}).length
-                  }}
-                </td>
-              </tr>
-              <tr style="box-shadow: 0 -1px 0 #000">
-                <td>전체 경쟁률</td>
-                <td
-                  v-if="
-                    Object.keys(clubInfo.joining ?? {}).length /
+        <v-card>
+          <v-card class="ma-5" style="border: 1px solid black">
+            <v-table>
+              <thead>
+                <tr style="background-color: skyblue">
+                  <th class="text-left">카테고리</th>
+                  <th class="text-left">정보</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>최대 모집 인원 수</td>
+                  <td>{{ clubInfo.memberNumber }}</td>
+                </tr>
+                <tr>
+                  <td>남은 인원 수</td>
+                  <td>
+                    {{
+                      clubInfo.memberNumber -
+                      Object.keys(clubInfo.accepted ?? {}).length
+                    }}
+                  </td>
+                </tr>
+                <tr style="box-shadow: 0 -1px 0 #000">
+                  <td>전체 경쟁률</td>
+                  <td
+                    v-if="
+                      Object.keys(clubInfo.joining ?? {}).length /
+                        (clubInfo.memberNumber -
+                          Object.keys(clubInfo.accepted ?? {}).length) <
+                      1
+                    "
+                  >
+                    100% 합격
+                  </td>
+                  <td v-else>
+                    {{
+                      Object.keys(clubInfo.joining ?? {}).length /
                       (clubInfo.memberNumber -
-                        Object.keys(clubInfo.accepted ?? {}).length) <
-                    1
-                  "
-                >
-                  100% 합격
-                </td>
-                <td v-else>
-                  {{
-                    Object.keys(clubInfo.joining ?? {}).length /
-                    (clubInfo.memberNumber -
-                      Object.keys(clubInfo.accepted ?? {}).length)
-                  }}
-                  대 1
-                </td>
-              </tr>
-              <tr style="box-shadow: 0 -1px 0 #000">
-                <td>현재 총 지원자 수</td>
-                <td>{{ Object.keys(clubInfo.joining ?? {}).length }}</td>
-              </tr>
-              <tr>
-                <td>현재 1학년 지원자 수</td>
-                <td>
-                  {{
-                    Object.keys(clubInfo.joining ?? {}).filter((a) =>
-                      a.startsWith("1")
-                    ).length
-                  }}
-                </td>
-              </tr>
-              <tr>
-                <td>현재 2학년 지원자 수</td>
-                <td>
-                  {{
-                    Object.keys(clubInfo.joining ?? {}).filter((a) =>
-                      a.startsWith("2")
-                    ).length
-                  }}
-                </td>
-              </tr>
-              <tr style="box-shadow: 0 -1px 0 #000">
-                <td>현재 총 합격자 수</td>
-                <td>{{ Object.keys(clubInfo.accepted ?? {}).length }}</td>
-              </tr>
-              <tr>
-                <td>현재 1학년 합격자 수</td>
-                <td>
-                  {{
-                    Object.keys(clubInfo.accepted ?? {}).filter((a) =>
-                      a.startsWith("1")
-                    ).length
-                  }}
-                </td>
-              </tr>
-              <tr>
-                <td>현재 2학년 합격자 수</td>
-                <td>
-                  {{
-                    Object.keys(clubInfo.accepted ?? {}).filter((a) =>
-                      a.startsWith("2")
-                    ).length
-                  }}
-                </td>
-              </tr>
-            </tbody>
-          </v-table>
+                        Object.keys(clubInfo.accepted ?? {}).length)
+                    }}
+                    대 1
+                  </td>
+                </tr>
+                <tr style="box-shadow: 0 -1px 0 #000">
+                  <td>현재 총 지원자 수</td>
+                  <td>{{ Object.keys(clubInfo.joining ?? {}).length }}</td>
+                </tr>
+                <tr>
+                  <td>현재 1학년 지원자 수</td>
+                  <td>
+                    {{
+                      Object.keys(clubInfo.joining ?? {}).filter((a) =>
+                        a.startsWith("1")
+                      ).length
+                    }}
+                  </td>
+                </tr>
+                <tr>
+                  <td>현재 2학년 지원자 수</td>
+                  <td>
+                    {{
+                      Object.keys(clubInfo.joining ?? {}).filter((a) =>
+                        a.startsWith("2")
+                      ).length
+                    }}
+                  </td>
+                </tr>
+                <tr style="box-shadow: 0 -1px 0 #000">
+                  <td>현재 총 합격자 수</td>
+                  <td>{{ Object.keys(clubInfo.accepted ?? {}).length }}</td>
+                </tr>
+                <tr>
+                  <td>현재 1학년 합격자 수</td>
+                  <td>
+                    {{
+                      Object.keys(clubInfo.accepted ?? {}).filter((a) =>
+                        a.startsWith("1")
+                      ).length
+                    }}
+                  </td>
+                </tr>
+                <tr>
+                  <td>현재 2학년 합격자 수</td>
+                  <td>
+                    {{
+                      Object.keys(clubInfo.accepted ?? {}).filter((a) =>
+                        a.startsWith("2")
+                      ).length
+                    }}
+                  </td>
+                </tr>
+              </tbody>
+            </v-table>
+          </v-card>
         </v-card>
       </v-bottom-sheet>
 

@@ -25,8 +25,8 @@
         </template>
 
         <v-list-item-title>{{ item.name }}</v-list-item-title>
-        <v-list-item-subtitle
-          >{{ item.leader }} · {{ item.coleader }}
+        <v-list-item-subtitle>
+          {{ item.leader }} · {{ item.coleader }}
         </v-list-item-subtitle>
       </v-list-item>
     </v-list>

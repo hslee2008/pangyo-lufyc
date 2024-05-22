@@ -15,7 +15,7 @@
       </thead>
       <tbody>
         <tr>
-          <td>계정 정보</td>
+          <td>계정 종류</td>
           <td>
             {{ type === "teacher" ? "선생님" : "학생" }}
           </td>

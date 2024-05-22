@@ -92,13 +92,14 @@
         :key="item.name"
         class="d-flex justify-center"
       >
-        <v-card :to="`/clubinfo?clubname=${item.name}`" width="150">
+        <v-card
+          :to="`/clubinfo?clubname=${item.name}`"
+          width="150"
+          elevation="4"
+        >
           <div style="background-color: white">
             <v-img
-              :src="
-                item?.image ??
-                'https://firebasestorage.googleapis.com/v0/b/thinkforall-linkall.appspot.com/o/school%2FPGHS.png?alt=media&token=1a077cc3-d8f0-4994-8d62-09d68ef49739'
-              "
+              :src="item?.image ?? '/PGHS.png'"
               class="align-end"
               height="150"
               cover

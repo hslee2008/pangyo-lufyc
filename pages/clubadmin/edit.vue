@@ -4,16 +4,13 @@
 
     <div class="pa-4 rounded-lg d-flex justify-center">
       <img
-        :src="
-          clubInfo.image ??
-          'https://firebasestorage.googleapis.com/v0/b/thinkforall-linkall.appspot.com/o/school%2FPGHS.png?alt=media&token=1a077cc3-d8f0-4994-8d62-09d68ef49739'
-        "
+        :src="clubInfo.image ?? '/PGHS.png'"
         draggable="false"
         class="rounded-lg"
         style="width: 300px"
       />
     </div>
-    
+
     <h1 class="text-center">{{ clubName }}</h1>
     <h3 class="text-center">
       {{ clubInfo.leader }} ·

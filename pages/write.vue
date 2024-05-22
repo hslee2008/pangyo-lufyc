@@ -15,12 +15,7 @@
       >
         <template v-slot:prepend>
           <v-avatar color="grey-lighten-1">
-            <v-img
-              :src="
-                item.image ??
-                'https://firebasestorage.googleapis.com/v0/b/thinkforall-linkall.appspot.com/o/school%2FPGHS.png?alt=media&token=1a077cc3-d8f0-4994-8d62-09d68ef49739'
-              "
-            ></v-img>
+            <v-img :src="item.image ?? '/PGHS.png'"></v-img>
           </v-avatar>
         </template>
 

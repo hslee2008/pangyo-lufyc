@@ -14,13 +14,65 @@
       <template v-slot:activator="{ props: activatorProps }">
         <div class="d-flex justify-center">
           <v-btn
+            v-bind="activatorProps"
+            color="surface-variant"
+            text="동아리원으로서 글쓰기"
+            prepend-icon="mdi-pencil"
+            variant="outlined"
+            class="mb-3"
+          ></v-btn>
+        </div>
+      </template>
+
+      <template v-slot:default="{ isActive }">
+        <v-card :title="`활동 기록하기`">
+          <v-card-text>
+            <v-text-field
+              v-model="newActivity.writer"
+              label="동아리원 이름"
+              variant="outlined"
+            ></v-text-field>
+            <v-select
+              v-model="newActivity.date"
+              :items="dates"
+              variant="outlined"
+            ></v-select>
+            <v-textarea
+              v-model="newActivity.content"
+              variant="outlined"
+            ></v-textarea>
+          </v-card-text>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+
+            <v-btn
+              text="등록하기"
+              color="primary"
+              @click="update(isActive)"
+            ></v-btn>
+            <v-btn
+              text="취소하기"
+              color="error"
+              @click="isActive.value = false"
+            ></v-btn>
+
+            <v-spacer></v-spacer>
+          </v-card-actions>
+        </v-card>
+      </template>
+    </v-dialog>
+    <v-dialog max-width="500">
+      <template v-slot:activator="{ props: activatorProps }">
+        <div class="d-flex justify-center">
+          <v-btn
             v-if="
               account.displayName === clubInfo.leader.replaceAll(' ', '') ||
               account.displayName === clubInfo.coleader.replaceAll(' ', '')
             "
             v-bind="activatorProps"
             color="surface-variant"
-            text="글쓰기"
+            text="부장/차장으로서 글쓰기"
             prepend-icon="mdi-pencil"
             variant="outlined"
           ></v-btn>
@@ -84,23 +136,79 @@
 
     <br />
 
-    <v-table>
+    <v-alert v-if="!activities">
+      <v-empty-state
+        icon="mdi-information-off"
+        text="아직까지 동아리 부장 또는 차장이 동아리 활동 글을 올리지 않았기 때문에 볼 수 없습니다."
+        title="동아리 활동 글이 아직 없습니다."
+      ></v-empty-state>
+    </v-alert>
+    <v-table v-else>
       <thead>
         <tr style="background-color: skyblue">
-          <th class="text-left">열기</th>
-          <th class="text-left">날짜</th>
-          <th class="text-left">글쓴이</th>
+          <th
+            v-if="
+              account.displayName === clubInfo.leader.replaceAll(' ', '') ||
+              account.displayName === clubInfo.coleader.replaceAll(' ', '')
+            "
+            class="text-center"
+          >
+            권한
+          </th>
+          <th class="text-center">열기</th>
+          <th class="text-center">날짜</th>
+          <th class="text-center">글쓴이</th>
         </tr>
       </thead>
       <tbody>
         <template v-for="(activity, date) in activities" :key="date">
           <tr v-for="(item, writer) in activity" :key="writer">
-            <td>
+            <td
+              class="text-center"
+              v-if="
+                account.displayName === clubInfo.leader.replaceAll(' ', '') ||
+                account.displayName === clubInfo.coleader.replaceAll(' ', '')
+              "
+            >
               <v-dialog max-width="500">
                 <template v-slot:activator="{ props: activatorProps }">
-                  <v-btn v-bind="activatorProps" variant="tonal" class="mr-5">
-                    열기
-                  </v-btn>
+                  <v-btn
+                    v-bind="activatorProps"
+                    icon="mdi-delete"
+                    variant="plain"
+                    color="error"
+                  ></v-btn>
+                </template>
+
+                <template v-slot:default="{ isActive }">
+                  <v-card title="진짜로 삭제할 것인가요?">
+                    <v-card-text>
+                      글을 삭제하면 다시 복구하는 것은 불가능합니다.
+                    </v-card-text>
+
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+
+                      <v-btn
+                        text="삭제하기"
+                        color="red"
+                        @click="deletePost(date, writer, isActive)"
+                      ></v-btn>
+                      <v-btn
+                        text="취소하기"
+                        @click="isActive.value = false"
+                      ></v-btn>
+
+                      <v-spacer></v-spacer>
+                    </v-card-actions>
+                  </v-card>
+                </template>
+              </v-dialog>
+            </td>
+            <td class="text-center">
+              <v-dialog max-width="500">
+                <template v-slot:activator="{ props: activatorProps }">
+                  <v-btn v-bind="activatorProps" variant="tonal"> 열기 </v-btn>
                 </template>
 
                 <template v-slot:default="{ isActive }">
@@ -111,12 +219,15 @@
 
                         <br /><br />
 
-                        <v-img
-                          v-for="image in item.images"
-                          :key="image"
-                          :src="image"
-                          class="my-2 rounded-lg"
-                        ></v-img>
+                        <v-row class="ga-4 justify-center">
+                          <v-img
+                            v-for="image in item.images"
+                            :key="image"
+                            :src="image"
+                            class="my-2 rounded-lg"
+                            style="max-width: 150px"
+                          ></v-img>
+                        </v-row>
                       </div>
                       <div v-else>
                         <v-textarea
@@ -125,15 +236,6 @@
                         ></v-textarea>
 
                         <div v-if="item.images">
-                          <br /><br />
-
-                          <v-img
-                            v-for="image in item.images"
-                            :key="image"
-                            :src="image"
-                            class="my-2 rounded-lg"
-                          ></v-img>
-
                           <v-alert>이미지는 수정할 수 없습니다.</v-alert>
                         </div>
                       </div>
@@ -141,7 +243,7 @@
                       <br /><br />
 
                       <v-btn
-                      v-if="edit"
+                        v-if="edit"
                         color="primary"
                         variant="tonal"
                         block
@@ -176,8 +278,8 @@
                 </template>
               </v-dialog>
             </td>
-            <td>{{ date.replaceAll("_", "/") }}</td>
-            <td>{{ writer }}</td>
+            <td class="text-center">{{ date.replaceAll("_", "/") }}</td>
+            <td class="text-center">{{ writer }}</td>
           </tr>
         </template>
       </tbody>
@@ -281,4 +383,11 @@ const upload = (f) => {
     });
   });
 };
+
+function deletePost(date, writer, isActive) {
+  delete activities.value[date][writer];
+  const activityRef = dbRef($db, `/activity/${clubName}`);
+  set(activityRef, activities.value);
+  isActive.value = false;
+}
 </script>

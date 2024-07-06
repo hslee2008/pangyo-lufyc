@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@agent-embed/js": "^0.0.9",
     "@mdi/font": "^7.4.47",
     "@vueuse/core": "^10.11.0",
     "firebase": "^10.12.3",

@@ -3,10 +3,12 @@ import { defineNuxtConfig } from "nuxt/config";
 
 export default defineNuxtConfig({
   modules: ["vuetify-nuxt-module"],
+
   vuetify: {
     moduleOptions: {},
     vuetifyOptions: {},
   },
+
   imports: {
     presets: [
       {
@@ -38,6 +40,7 @@ export default defineNuxtConfig({
       },
     ],
   },
+
   app: {
     pageTransition: { name: "page", mode: "out-in" },
     head: {
@@ -45,4 +48,6 @@ export default defineNuxtConfig({
       viewport: "width=device-width, initial-scale=1",
     },
   },
+
+  compatibilityDate: "2024-07-04",
 });

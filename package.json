@@ -11,15 +11,17 @@
   },
   "dependencies": {
     "@mdi/font": "^7.4.47",
-    "@vueuse/core": "^10.9.0",
-    "firebase": "^10.11.1",
-    "nuxt": "^3.11.2",
-    "vue": "^3.4.27",
-    "vue-router": "^4.3.2",
-    "vuetify-nuxt-module": "^0.14.0"
+    "@vueuse/core": "^10.11.0",
+    "firebase": "^10.12.3",
+    "freegptjs": "^0.0.2",
+    "nuxt": "^3.12.3",
+    "openai": "^4.52.3",
+    "vue": "^3.4.31",
+    "vue-router": "^4.4.0",
+    "vuetify-nuxt-module": "^0.14.1"
   },
   "devDependencies": {
     "vite-plugin-vuetify": "^2.0.3",
-    "vuetify": "^3.6.5"
+    "vuetify": "^3.6.11"
   }
 }

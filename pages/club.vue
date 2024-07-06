@@ -30,11 +30,11 @@
     <div class="d-flex ga-3">
       <v-checkbox
         v-model="onlySeeCanJoin"
-        label="모집 중인 동아리만 보기"
+        label="모집 중"
       ></v-checkbox>
       <v-checkbox
         v-model="onlySeeExistInfo"
-        label="정보 등록된 동아리만 보기"
+        label="정보 등록됨"
       ></v-checkbox>
     </div>
 

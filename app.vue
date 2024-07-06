@@ -36,11 +36,18 @@
         <span>활동기록</span>
       </v-btn>
 
+      <v-btn to="/recommend">
+        <v-icon>mdi-head-snowflake-outline</v-icon>
+
+        <span>동아리 추천</span>
+      </v-btn>
+
       <v-btn to="/account">
         <v-icon>mdi-account</v-icon>
 
         <span>계정</span>
       </v-btn>
+
 
       <v-btn v-if="typeofAccount === 'teacher'" to="/admin">
         <v-icon>mdi-security</v-icon>

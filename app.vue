@@ -1,5 +1,8 @@
 <template>
   <v-app>
+    <VitePwaManifest />
+    <NuxtLoadingIndicator />
+
     <NuxtLayout>
       <v-main>
         <div class="d-flex justify-center">
@@ -47,7 +50,6 @@
 
         <span>계정</span>
       </v-btn>
-
 
       <v-btn v-if="typeofAccount === 'teacher'" to="/admin">
         <v-icon>mdi-security</v-icon>

@@ -2,12 +2,7 @@
 import { defineNuxtConfig } from "nuxt/config";
 
 export default defineNuxtConfig({
-  modules: ["vuetify-nuxt-module"],
-
-  vuetify: {
-    moduleOptions: {},
-    vuetifyOptions: {},
-  },
+  modules: ["vuetify-nuxt-module", "@vite-pwa/nuxt"],
 
   imports: {
     presets: [

@@ -9,7 +9,9 @@
           <NuxtPage />
         </div>
 
-        <br /><br /><br />
+        <template v-if="route.path !== '/recommend' && route.path !== '/'">
+          <br /><br /><br />
+        </template>
       </v-main>
     </NuxtLayout>
 
@@ -66,6 +68,7 @@ import { onAuthStateChanged } from "firebase/auth";
 const { $auth, $db } = useNuxtApp();
 
 const router = useRouter();
+const route = useRoute();
 
 const account = ref({});
 const typeofAccount = ref("member");

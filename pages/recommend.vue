@@ -7,12 +7,18 @@
     <br />
 
     <v-tabs v-model="tab" align-tabs="center" color="deep-purple-accent-4" grow>
-      <v-tab :value="1">MBTI로 추천</v-tab>
-      <v-tab :value="2">AI와 상담</v-tab>
+      <v-tab :value="1">AI와 상담</v-tab>
+      <v-tab :value="2">MBTI로 추천</v-tab>
     </v-tabs>
 
     <v-tabs-window v-model="tab">
-      <v-tabs-window-item :value="1" class="mx-5 my-6">
+      <v-tabs-window-item :value="1">
+        <iframe
+          src="https://chippapromptwriter-8382.chipp.ai/"
+          style="width: 100%; height: 100vh; outline: none"
+        ></iframe>
+      </v-tabs-window-item>
+      <v-tabs-window-item :value="2" class="mx-5 my-6">
         <p>MBTI를 여러 개 선택할 경우, 그 중에 하나라도 해당하면 추천합니다.</p>
 
         <br />
@@ -73,9 +79,6 @@
             </v-card>
           </v-col>
         </v-row>
-      </v-tabs-window-item>
-      <v-tabs-window-item :value="2">
-        <iframe src="https://chippapromptwriter-8382.chipp.ai/" style="width: 100%; height: 100vh; outline: none;"></iframe>
       </v-tabs-window-item>
     </v-tabs-window>
   </div>

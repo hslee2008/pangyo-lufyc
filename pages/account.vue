@@ -90,7 +90,7 @@
     <br /><br /><br />
 
     <div class="d-flex justify-center">
-      <v-btn color="red" block @click="logout"> 로그아웃 </v-btn>
+      <v-btn color="red" block variant="tonal" @click="logout"> 로그아웃 </v-btn>
     </div>
   </div>
 </template>

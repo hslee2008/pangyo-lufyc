@@ -28,14 +28,8 @@
     </v-autocomplete>
 
     <div class="d-flex ga-3">
-      <v-checkbox
-        v-model="onlySeeCanJoin"
-        label="모집 중"
-      ></v-checkbox>
-      <v-checkbox
-        v-model="onlySeeExistInfo"
-        label="정보 등록됨"
-      ></v-checkbox>
+      <v-checkbox v-model="onlySeeCanJoin" label="모집 중"></v-checkbox>
+      <v-checkbox v-model="onlySeeExistInfo" label="정보 등록됨"></v-checkbox>
     </div>
 
     <v-radio-group v-model="std">
@@ -94,25 +88,24 @@
       >
         <v-card
           :to="`/clubinfo?clubname=${item.name}`"
-          width="150"
+          class="club-card"
           elevation="4"
         >
-          <div style="background-color: white">
-            <v-img
-              :src="item?.image ?? '/PGHS.png'"
-              class="align-end"
-              height="150"
-              cover
-            ></v-img>
-          </div>
+          <v-img
+            :src="item?.image || item?.poster || '/PGHS.png'"
+            class="club-card-image"
+            height="150"
+            cover
+          ></v-img>
 
-          <h4 class="text-center mt-3">
+          <v-card-title class="club-card-title" style="font-size: 15px">
             <mark>{{ item.name }}</mark>
-          </h4>
-          <v-card-actions>
-            부장: {{ item.leader }} <br />
-            차장: {{ item.coleader }}
-          </v-card-actions>
+          </v-card-title>
+
+          <v-card-text class="club-card-text">
+            <p>부장: {{ item.leader }}</p>
+            <p>차장: {{ item.coleader }}</p>
+          </v-card-text>
         </v-card>
       </v-col>
     </v-row>
@@ -229,3 +222,41 @@ onMounted(() => {
   onValue(clubRef, (snapshot) => (list.value = snapshot.val()));
 });
 </script>
+
+<style>
+.club-card {
+  width: 150px;
+  margin: 16px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.club-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.club-card-image {
+  background-color: white;
+}
+
+.club-card-title {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 12px;
+}
+
+.club-card-title mark {
+  background-color: yellow;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+.club-card-text {
+  padding: 8px;
+  text-align: center;
+  font-size: 14px;
+}
+</style>

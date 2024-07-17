@@ -59,45 +59,6 @@
       </div>
     </div>
 
-    <v-dialog max-width="300">
-      <template v-slot:activator="{ props: activatorProps }">
-        <v-fab
-          v-if="Object.keys(clubInfo).length > 3"
-          v-bind="activatorProps"
-          icon="mdi-frequently-asked-questions"
-          size="large"
-          color="primary"
-          elevation="8"
-          location="bottom end"
-          app
-          appear
-        />
-      </template>
-
-      <template v-slot:default="{ isActive }">
-        <v-card>
-          <v-card-title class="text-center mt-2">문의하기</v-card-title>
-          <v-card-text>
-            <v-textarea
-              v-model="question"
-              variant="outlined"
-              placeholder="생기부 잘 써주나요?"
-              append-inner-icon="mdi-send"
-              @click:appendInner="send"
-            ></v-textarea>
-          </v-card-text>
-
-          <v-card-actions>
-            <v-spacer></v-spacer>
-
-            <v-btn text="닫기" block @click="isActive.value = false"></v-btn>
-
-            <v-spacer></v-spacer>
-          </v-card-actions>
-        </v-card>
-      </template>
-    </v-dialog>
-
     <div class="pa-4 rounded-lg d-flex justify-center">
       <img
         :src="clubInfo.image ?? '/PGHS.png'"
@@ -446,6 +407,21 @@
           </div>
         </div>
       </div>
+
+      <br /><br />
+
+      <v-card v-if="Object.keys(clubInfo).length > 3" elevation="0">
+        <v-card-title class="text-center mt-2">문의하기</v-card-title>
+        <v-card-text>
+          <v-textarea
+            v-model="question"
+            variant="outlined"
+            placeholder="생기부 잘 써주나요?"
+            append-inner-icon="mdi-send"
+            @click:appendInner="send"
+          ></v-textarea>
+        </v-card-text>
+      </v-card>
     </div>
   </div>
 </template>

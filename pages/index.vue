@@ -1,54 +1,21 @@
 <template>
-  <div>
-    <div class="text-center">
-      <v-parallax src="/pangyo.png">
-        <div
-          color="text-gray"
-          class="mt-7 pt-2 mb-3"
-          style="background-color: white"
-        >
-          <img
-            src="https://pangyo-h.goesn.kr/upload/pangyo-h/logo/img_9e63452b-11df-4ae5-aba6-8cb5def1c5bc1637653713039.png"
-            draggable="false"
-          />
-        </div>
-        <h1 class="text-white mt-2 mb-3" style="font-size: 35px">
-          찾아줄게! 너의 동아리
-        </h1>
-        <v-alert class="mx-4 text-justify" elevation="24">
-          찾아줄게! 너의 동아리 어플은 판교고등학교 학생들이 보다 쉽게 자신이
-          원하는 동아리를 찾게 도와줍니다. 실시간으로 다양한 정보를 제공하고
-          어플 내에서 동아리원과 부장의 소통이 가능합니다.
-        </v-alert>
+  <div class="text-center">
+    <v-parallax src="/pangyo.png">
+      <div color="text-gray" class="mt-7 pt-2" style="background-color: white">
+        <img
+          src="https://pangyo-h.goesn.kr/upload/pangyo-h/logo/img_9e63452b-11df-4ae5-aba6-8cb5def1c5bc1637653713039.png"
+          draggable="false"
+        />
+      </div>
+      <h1 class="text-white mt-2 mb-3 mt-4" style="font-size: 35px">
+        찾아줄게! 너의 동아리
+      </h1>
+      <v-alert class="mx-4 text-justify" elevation="24">
+        찾아줄게! 너의 동아리 어플은 판교고등학교 학생들이 보다 쉽게 자신이
+        원하는 동아리를 찾게 도와줍니다. 실시간으로 다양한 정보를 제공하고 어플
+        내에서 동아리원과 부장의 소통이 가능합니다.
+      </v-alert>
 
-        <br />
-        <br />
-
-        <v-btn
-          variant="tonal"
-          class="rounded-circle"
-          size="x-large"
-          style="background-color: white"
-          icon="mdi-arrow-down"
-          @click="() => (y += 5000)"
-        ></v-btn>
-
-        <div
-          style="
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            background-color: white;
-            opacity: 0.6;
-          "
-        >
-          <p>Copyright © 이현승 2024 — All rights reserved</p>
-          <p>버전 v0.0.15</p>
-        </div>
-      </v-parallax>
-
-      <br />
-      <br />
       <br />
 
       <v-alert v-if="!account" class="mx-4">
@@ -100,7 +67,20 @@
           </div>
         </div>
       </v-alert>
-    </div>
+
+      <div
+        style="
+          position: absolute;
+          bottom: 0;
+          width: 100%;
+          background-color: white;
+          opacity: 0.6;
+        "
+      >
+        <p>Copyright 2024 — All rights reserved</p>
+        <p>버전 v0.0.15</p>
+      </div>
+    </v-parallax>
   </div>
 </template>
 

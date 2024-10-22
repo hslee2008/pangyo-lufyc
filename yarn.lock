@@ -7512,6 +7512,11 @@ vue-router@^4.4.5:
   dependencies:
     "@vue/devtools-api" "^6.6.4"
 
+vue-search-select@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/vue-search-select/-/vue-search-select-3.2.0.tgz#c05983702864fc3ee863e8bbd25a3d8addfbb7e3"
+  integrity sha512-X4FCEocMX3vJ/hJRgAcOG18GFxHHNj2umkZee0Pa4kMemBapma6RyOq7GD25kN/FWAal43IbW6GqiZ9h9y0lyA==
+
 vue@^3.5.12, vue@^3.5.5:
   version "3.5.12"
   resolved "https://registry.yarnpkg.com/vue/-/vue-3.5.12.tgz#e08421c601b3617ea2c9ef0413afcc747130b36c"

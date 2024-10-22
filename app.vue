@@ -21,7 +21,9 @@
         ></v-list-item>
         <v-divider class="my-3"></v-divider>
         <v-list-item color="primary" rounded="xl" to="/">
-          <v-list-item-title><v-icon start>mdi-home</v-icon> 홈</v-list-item-title>
+          <v-list-item-title
+            ><v-icon start>mdi-home</v-icon> 홈</v-list-item-title
+          >
         </v-list-item>
         <v-list-item color="primary" rounded="xl" to="/club">
           <v-list-item-title
@@ -35,7 +37,8 @@
         </v-list-item>
         <v-list-item color="primary" rounded="xl" to="/recommend">
           <v-list-item-title
-            ><v-icon start>mdi-robot-outline</v-icon> 동아리 추천</v-list-item-title
+            ><v-icon start>mdi-robot-outline</v-icon> 동아리
+            추천</v-list-item-title
           >
         </v-list-item>
         <v-list-item color="primary" rounded="xl" to="/account">
@@ -57,6 +60,11 @@
 
         <v-divider class="my-3"></v-divider>
 
+        <v-list-item color="primary" rounded="xl" to="/survey/select">
+          <v-list-item-title>
+            <v-icon start>mdi-clipboard</v-icon> 동아리 평가하기
+          </v-list-item-title>
+        </v-list-item>
         <v-list-item color="primary" rounded="xl" to="/survey/result">
           <v-list-item-title>
             <v-icon start>mdi-clipboard-list</v-icon> 동아리 발표회

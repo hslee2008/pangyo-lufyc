@@ -7,24 +7,25 @@
     "dev": "nuxt dev --port 2024",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "update": "yarn upgrade && ncu -u && yarn"
   },
   "dependencies": {
-    "@agent-embed/js": "^0.0.11",
+    "@agent-embed/js": "^0.0.17",
     "@mdi/font": "^7.4.47",
-    "@vite-pwa/nuxt": "^0.9.1",
-    "@vueuse/core": "^10.11.0",
-    "firebase": "^10.12.3",
+    "@vite-pwa/nuxt": "^0.10.5",
+    "@vueuse/core": "^11.1.0",
+    "firebase": "^11.0.0",
     "freegptjs": "^0.0.2",
-    "nuxt": "^3.12.3",
-    "openai": "^4.52.7",
-    "vue": "^3.4.32",
-    "vue-router": "^4.4.0",
-    "vuetify-nuxt-module": "^0.15.1"
+    "nuxt": "^3.13.2",
+    "openai": "^4.68.1",
+    "vue": "^3.5.12",
+    "vue-router": "^4.4.5",
+    "vuetify-nuxt-module": "^0.18.3"
   },
   "devDependencies": {
-    "vite-plugin-vuetify": "^2.0.3",
-    "vuetify": "^3.6.13"
+    "vite-plugin-vuetify": "^2.0.4",
+    "vuetify": "^3.7.3"
   },
   "packageManager": "yarn@1.22.19+sha1.4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447"
 }

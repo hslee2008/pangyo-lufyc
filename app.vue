@@ -3,6 +3,66 @@
     <VitePwaManifest />
     <NuxtLoadingIndicator />
 
+    <v-app-bar :elevation="0">
+      <template v-slot:prepend>
+        <v-app-bar-nav-icon @click="appbar = !appbar"></v-app-bar-nav-icon>
+      </template>
+
+      <v-app-bar-title>
+        <NuxtLink to="/" class="text-decoration-none text-black">찾동</NuxtLink>
+      </v-app-bar-title>
+    </v-app-bar>
+
+    <v-navigation-drawer v-model="appbar">
+      <v-list density="compact">
+        <v-list-item
+          title="찾아줄게! 너의 동아리"
+          subtitle="코딩인싸이트"
+        ></v-list-item>
+        <v-divider class="my-3"></v-divider>
+        <v-list-item color="primary" rounded="xl" to="/">
+          <v-list-item-title><v-icon>mdi-home</v-icon> 홈</v-list-item-title>
+        </v-list-item>
+        <v-list-item color="primary" rounded="xl" to="/club">
+          <v-list-item-title
+            ><v-icon>mdi-account-group</v-icon> 동아리</v-list-item-title
+          >
+        </v-list-item>
+        <v-list-item color="primary" rounded="xl" to="/write">
+          <v-list-item-title
+            ><v-icon>mdi-pencil-box</v-icon> 활동기록</v-list-item-title
+          >
+        </v-list-item>
+        <v-list-item color="primary" rounded="xl" to="/recommend">
+          <v-list-item-title
+            ><v-icon>mdi-robot-outline</v-icon> 동아리 추천</v-list-item-title
+          >
+        </v-list-item>
+        <v-list-item color="primary" rounded="xl" to="/account">
+          <v-list-item-title
+            ><v-icon>mdi-account</v-icon> 계정</v-list-item-title
+          >
+        </v-list-item>
+        <v-list-item
+          v-if="typeofAccount === 'teacher'"
+          color="primary"
+          rounded="xl"
+          to="/admin"
+        >
+          <v-list-item-title
+            ><v-icon>mdi-account-lock-outline</v-icon> 관리자
+            페이지</v-list-item-title
+          >
+        </v-list-item>
+
+        <v-divider class="my-3"></v-divider>
+
+        <v-list-item color="primary" rounded="xl" to="/survey/result">
+          <v-list-item-title> 동아리 발표회 결과보기</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
+
     <NuxtLayout>
       <v-main>
         <div class="d-flex justify-center">
@@ -14,51 +74,6 @@
         </template>
       </v-main>
     </NuxtLayout>
-
-    <v-bottom-navigation
-      v-if="account"
-      color="skyblue"
-      height="50"
-      elevation="10"
-      grow
-      selected-class="text-blue"
-    >
-      <v-btn to="/">
-        <v-icon>mdi-home</v-icon>
-
-        <span>홈</span>
-      </v-btn>
-
-      <v-btn to="/club">
-        <v-icon>mdi-town-hall</v-icon>
-
-        <span>동아리</span>
-      </v-btn>
-
-      <v-btn to="/write">
-        <v-icon>mdi-pencil</v-icon>
-
-        <span>활동기록</span>
-      </v-btn>
-
-      <v-btn to="/recommend">
-        <v-icon>mdi-head-snowflake-outline</v-icon>
-
-        <span>동아리 추천</span>
-      </v-btn>
-
-      <v-btn to="/account">
-        <v-icon>mdi-account</v-icon>
-
-        <span>계정</span>
-      </v-btn>
-
-      <v-btn v-if="typeofAccount === 'teacher'" to="/admin">
-        <v-icon>mdi-security</v-icon>
-
-        <span>Admin</span>
-      </v-btn>
-    </v-bottom-navigation>
   </v-app>
 </template>
 
@@ -69,6 +84,8 @@ const { $auth, $db } = useNuxtApp();
 
 const router = useRouter();
 const route = useRoute();
+
+const appbar = ref(false);
 
 const account = ref({});
 const typeofAccount = ref("member");

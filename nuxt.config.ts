@@ -45,4 +45,34 @@ export default defineNuxtConfig({
   },
 
   compatibilityDate: "2024-07-04",
+
+  pwa: {
+    manifest: {
+      name: "찾아줄게! 너의 동아리",
+      short_name: "찾동!",
+      description: "판교고 학생들을 위한 동아리 정보 제공 플랫폼",
+      lang: "ko",
+      theme_color: "#ffffff",
+      background_color: "#ffffff",
+      display: "standalone",
+      orientation: "portrait",
+      scope: "/",
+      start_url: "/",
+      dir: "ltr",
+      icons: [
+        {
+          src: "/icon.png",
+          sizes: "998x998",
+          type: "image/png",
+        },
+      ],
+    },
+    workbox: {
+      navigateFallback: "/",
+    },
+    devOptions: {
+      enabled: true,
+      type: "module",
+    },
+  },
 });

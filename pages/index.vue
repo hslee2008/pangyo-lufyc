@@ -1,12 +1,6 @@
 <template>
   <div class="text-center">
     <v-parallax src="/pangyo.png">
-      <div color="text-gray" class="mt-7 pt-2" style="background-color: white">
-        <img
-          src="https://pangyo-h.goesn.kr/upload/pangyo-h/logo/img_9e63452b-11df-4ae5-aba6-8cb5def1c5bc1637653713039.png"
-          draggable="false"
-        />
-      </div>
       <h1 class="text-white mt-2 mb-3 mt-4" style="font-size: 35px">
         찾아줄게! 너의 동아리
       </h1>
@@ -31,6 +25,21 @@
         </v-btn>
       </v-alert>
 
+      <div
+        style="
+          position: absolute;
+          bottom: 0;
+          width: 100%;
+          background-color: white;
+          opacity: 0.6;
+        "
+      >
+        <p>Copyright 2024 — All rights reserved</p>
+        <p>버전 v0.0.15</p>
+      </div>
+    </v-parallax>
+
+    <div class="my-7">
       <v-alert
         v-if="account && !account?.email?.includes('pangyo.hs.kr')"
         class="text-justify mx-4 mt-2"
@@ -67,20 +76,7 @@
           </div>
         </div>
       </v-alert>
-
-      <div
-        style="
-          position: absolute;
-          bottom: 0;
-          width: 100%;
-          background-color: white;
-          opacity: 0.6;
-        "
-      >
-        <p>Copyright 2024 — All rights reserved</p>
-        <p>버전 v0.0.15</p>
-      </div>
-    </v-parallax>
+    </div>
   </div>
 </template>
 

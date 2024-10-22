@@ -2,6 +2,16 @@
   <div class="mx-4" style="width: 100%">
     <br />
 
+    <v-card
+      variant="tonal"
+      prepend-icon="mdi-clipboard-list"
+      title="동아리 발표회"
+      subtitle="동아리 발표회를 진행하고 평가해 주세요."
+      :to="`/survey/club/?clubname=${clubName}`"
+    ></v-card>
+
+    <br />
+
     <div
       v-if="
         clubInfo.leader.replaceAll(' ', '') === account.displayName ||
@@ -292,7 +302,6 @@
 
       <div
         v-if="
-          typeofAccount !== 'teacher' &&
           clubInfo.leader.replaceAll(' ', '') !== account.displayName &&
           clubInfo.coleader.replaceAll(' ', '') !== account.displayName
         "

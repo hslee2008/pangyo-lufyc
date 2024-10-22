@@ -226,7 +226,6 @@ onMounted(() => {
 <style>
 .club-card {
   width: 150px;
-  margin: 16px;
   background-color: #f9f9f9;
   border-radius: 8px;
   overflow: hidden;

@@ -8,20 +8,18 @@
 
     <div class="d-flex justify-center align-center flex-column">
       <v-card
-        v-for="(item, name) in Object.values(list ?? {})"
+        v-for="(item, name) in Object.values(list ?? {}).slice(0, 3)"
         :key="Object.keys(list ?? {})[name]"
         :to="`/survey/view?clubname=${Object.keys(list ?? {})[name]}&place=${
           name + 1
         }`"
         elevation="4"
-        :width="name <= 2 ? 250 : 200"
+        :width="name <= 2 ? 200 : 150"
         :style="`${name <= 2 ? 'outline: 5px solid;' : ''} ${
           name === 0 ? 'outline-color: gold;' : ''
         } ${name === 1 ? 'outline-color: silver;' : ''} ${
           name === 2 ? 'outline-color: #CD7F32;' : ''
-        } ${
-          name === 2 ? 'margin-bottom: 70px;' : 'margin-bottom: 30px;'
-        }`"
+        } ${name === 2 ? 'margin-bottom: 70px;' : 'margin-bottom: 30px;'}`"
       >
         <v-card width="250" height="100">
           <v-img
@@ -32,26 +30,99 @@
             cover
           ></v-img>
         </v-card>
-        <div class="d-flex justify-center">
+        <div class="d-flex justify-center" v-if="name <= 2">
           <v-rating
             :model-value="roundRating(item.totalAccumulation, item.totalCount)"
             color="amber"
             readonly
             half-increments
+            size="small"
           ></v-rating>
         </div>
-        <v-card-title class="text-h4 text-center">
+        <v-card-title class="text-center">
           {{ Object.keys(list ?? {})[name] }}
         </v-card-title>
         <v-card-text class="club-card-text mb-4">
           <v-card-subtitle class="text-left">
             등수: {{ name + 1 }}위<br />
             평점
-            {{ roundRating(item.totalAccumulation, item.totalCount) }}
-            / 설문 수: {{ item.totalCount }}
+            {{ roundRating(item.totalAccumulation, item.totalCount) }}<br />
+            설문 수: {{ item.totalCount }}
           </v-card-subtitle>
         </v-card-text>
       </v-card>
+
+      <div class="d-flex justify-center align-center">
+        <v-row class="d-flex justify-center align-center">
+          <v-col
+            v-for="(item, name) in Object.values(list ?? {}).slice(
+              3,
+              Object.values(list ?? {}).length
+            )"
+            :key="
+              Object.keys(list ?? {}).slice(
+                3,
+                Object.values(list ?? {}).length
+              )[name]
+            "
+            sm="4"
+          >
+            <v-card
+              :to="`/survey/view?clubname=${
+                Object.keys(list ?? {}).slice(
+                  3,
+                  Object.values(list ?? {}).length
+                )[name]
+              }&place=${name + 4}`"
+              elevation="4"
+              width="200"
+            >
+              <v-card width="250" height="100">
+                <v-img
+                  :src="
+                    club[
+                      Object.keys(list ?? {}).slice(
+                        3,
+                        Object.values(list ?? {}).length
+                      )[name]
+                    ]?.image ??
+                    'https://seongnam.grandculture.net/Image?localName=seongnam&id=GC001P3593&t=middle'
+                  "
+                  cover
+                ></v-img>
+              </v-card>
+              <div class="d-flex justify-center" v-if="name <= 2">
+                <v-rating
+                  :model-value="
+                    roundRating(item.totalAccumulation, item.totalCount)
+                  "
+                  color="amber"
+                  readonly
+                  half-increments
+                  size="small"
+                ></v-rating>
+              </div>
+              <v-card-title class="text-center">
+                {{
+                  Object.keys(list ?? {}).slice(
+                    3,
+                    Object.values(list ?? {}).length
+                  )[name]
+                }}
+              </v-card-title>
+              <v-card-text class="club-card-text mb-4">
+                <v-card-subtitle class="text-left">
+                  등수: {{ name + 4 }}위<br />
+                  평점
+                  {{ roundRating(item.totalAccumulation, item.totalCount)
+                  }}<br />
+                  설문 수: {{ item.totalCount }}
+                </v-card-subtitle>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+      </div>
     </div>
   </div>
 </template>

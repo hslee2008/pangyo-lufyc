@@ -3,7 +3,7 @@
     <VitePwaManifest />
     <NuxtLoadingIndicator />
 
-    <v-app-bar :elevation="0">
+    <v-app-bar :elevation="0" v-if="!route.path.includes('survey')">
       <template v-slot:prepend>
         <v-app-bar-nav-icon @click="appbar = !appbar"></v-app-bar-nav-icon>
       </template>
@@ -13,7 +13,7 @@
       </v-app-bar-title>
     </v-app-bar>
 
-    <v-navigation-drawer v-model="appbar">
+    <v-navigation-drawer v-model="appbar" v-if="!route.path.includes('survey')">
       <v-list density="compact">
         <v-list-item
           title="찾아줄게! 너의 동아리"

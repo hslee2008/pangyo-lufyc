@@ -128,11 +128,16 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
-const { $db } = useNuxtApp();
+import { get } from "firebase/database";
+import { onAuthStateChanged } from "firebase/auth";
+
+const { $db, $auth } = useNuxtApp();
+
+const router = useRouter();
 
 const list = ref([]);
 const club = ref("");
+const account = ref(null);
 
 const fetchData = async () => {
   try {

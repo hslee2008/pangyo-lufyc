@@ -10,6 +10,18 @@
 
     <br />
 
+    <div class="d-flex justify-center">
+      <v-rating
+        :model-value="
+          roundRating(listInfo.totalAccumulation, listInfo.totalCount)
+        "
+        color="amber"
+        readonly
+        half-increments
+        size="x-large"
+      ></v-rating>
+    </div>
+
     <v-table style="border: 1px solid black" class="rounded-lg">
       <thead>
         <tr style="background-color: skyblue">

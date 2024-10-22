@@ -105,7 +105,11 @@ onMounted(() => {
   onAuthStateChanged($auth, (user) => {
     account.value = user;
 
-    const type = dbRef($db, `/everyone/${user.displayName}/type`);
+    if (account.value === null) {
+      return
+    }
+
+    const type = dbRef($db, `/everyone/${user?.displayName}/type`);
     onValue(type, (snapshot) => (typeofAccount.value = snapshot.val()));
   });
 });

@@ -55,7 +55,7 @@
           <v-card-title>판교고 계정으로 로그인하기</v-card-title>
         </template>
 
-        <v-card-text>
+        <v-card-text v-if="account?.displayName">
           학번 + 이름: {{ account?.displayName }}<br />
           소속 동아리: {{ checkIfMember(account?.displayName) }}
         </v-card-text>
@@ -115,8 +115,8 @@ function submit() {
   const surveyed = dbRef($db, `survey/${clubName}/list/${account.value.uid}`);
   set(surveyed, {
     name: joining.value.name,
-    email: joining.value.email,
-    photoURL: joining.value.photoURL,
+    email: joining.value?.email,
+    photoURL: joining.value?.photoURL,
     rating: rating.value,
     review: review.value,
   });
@@ -160,26 +160,26 @@ const login = async () => {
 onMounted(async () => {
   onAuthStateChanged($auth, (user) => {
     account.value = user;
-    joining.value.name = user.displayName;
-    joining.value.email = user.email;
-    joining.value.photoURL = user.photoURL;
+    joining.value.name = user?.displayName;
+    joining.value.email = user?.email;
+    joining.value.photoURL = user?.photoURL;
 
     onValue(
-      dbRef($db, `everyone/${account.value.displayName}/type`),
+      dbRef($db, `everyone/${account.value?.displayName}/type`),
       (snapshot) => {
         typeofAccount.value = snapshot.val();
       }
     );
 
-    console.log(account.value.displayName);
-    console.log(checkIfMember(account.value.displayName));
+    console.log(account.value?.displayName);
+    console.log(checkIfMember(account.value?.displayName));
     console.log(clubName);
-    console.log(checkIfMember(account.value.displayName) === clubName);
-    if (checkIfMember(account.value.displayName) === clubName) {
+    console.log(checkIfMember(account.value?.displayName) === clubName);
+    if (checkIfMember(account.value?.displayName) === clubName) {
       matched.value = true;
     }
 
-    if (account.value === null) {
+    if (account.value == null) {
       notloggedin.value = true;
     }
   });

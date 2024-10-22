@@ -106,7 +106,7 @@ const login = async () => {
     onAuthStateChanged($auth, async (user) => {
       account.value = user;
 
-      //if (!user?.email?.includes("pangyo.hs.kr")) return;
+      if (!user?.email?.includes("pangyo.hs.kr")) return;
 
       if (/^\d+$/.test(user?.email?.slice(0, user?.email?.indexOf("@")))) {
         const everyone = dbRef($db, `everyone/${user.displayName}`);

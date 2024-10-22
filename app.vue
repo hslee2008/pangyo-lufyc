@@ -21,26 +21,26 @@
         ></v-list-item>
         <v-divider class="my-3"></v-divider>
         <v-list-item color="primary" rounded="xl" to="/">
-          <v-list-item-title><v-icon>mdi-home</v-icon> 홈</v-list-item-title>
+          <v-list-item-title><v-icon start>mdi-home</v-icon> 홈</v-list-item-title>
         </v-list-item>
         <v-list-item color="primary" rounded="xl" to="/club">
           <v-list-item-title
-            ><v-icon>mdi-account-group</v-icon> 동아리</v-list-item-title
+            ><v-icon start>mdi-account-group</v-icon> 동아리</v-list-item-title
           >
         </v-list-item>
         <v-list-item color="primary" rounded="xl" to="/write">
           <v-list-item-title
-            ><v-icon>mdi-pencil-box</v-icon> 활동기록</v-list-item-title
+            ><v-icon start>mdi-pencil-box</v-icon> 활동기록</v-list-item-title
           >
         </v-list-item>
         <v-list-item color="primary" rounded="xl" to="/recommend">
           <v-list-item-title
-            ><v-icon>mdi-robot-outline</v-icon> 동아리 추천</v-list-item-title
+            ><v-icon start>mdi-robot-outline</v-icon> 동아리 추천</v-list-item-title
           >
         </v-list-item>
         <v-list-item color="primary" rounded="xl" to="/account">
           <v-list-item-title
-            ><v-icon>mdi-account</v-icon> 계정</v-list-item-title
+            ><v-icon start>mdi-account</v-icon> 계정</v-list-item-title
           >
         </v-list-item>
         <v-list-item
@@ -50,7 +50,7 @@
           to="/admin"
         >
           <v-list-item-title
-            ><v-icon>mdi-account-lock-outline</v-icon> 관리자
+            ><v-icon start>mdi-account-lock-outline</v-icon> 관리자
             페이지</v-list-item-title
           >
         </v-list-item>
@@ -58,7 +58,10 @@
         <v-divider class="my-3"></v-divider>
 
         <v-list-item color="primary" rounded="xl" to="/survey/result">
-          <v-list-item-title> 동아리 발표회 결과보기</v-list-item-title>
+          <v-list-item-title>
+            <v-icon start>mdi-clipboard-list</v-icon> 동아리 발표회
+            결과보기</v-list-item-title
+          >
         </v-list-item>
       </v-list>
     </v-navigation-drawer>

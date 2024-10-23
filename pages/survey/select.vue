@@ -1,6 +1,6 @@
 <template>
-  <div class="mx-4">
-    <div class="d-flex justify-center align-center">
+  <div class="mx-4 d-flex justify-center align-center" style="height: 50vh">
+    <div>
       <v-autocomplete
         :items="items"
         density="comfortable"
@@ -9,7 +9,7 @@
         prepend-inner-icon="mdi-magnify"
         style="width: calc(100vw - 100px); margin-top: 10px"
         theme="light"
-        variant="solo"
+        variant="outlined"
         auto-select-first
         item-props
         rounded

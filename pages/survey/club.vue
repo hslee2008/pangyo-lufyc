@@ -49,11 +49,11 @@
           <v-btn class="mb-2" color="green" block rounded to="/survey/result"
             >결과보기</v-btn
           >
-          <v-btn color="primary" block rounded to="/club">닫기</v-btn>
+          <v-btn color="primary" block rounded to="/survey/select">닫기</v-btn>
         </v-card-text>
       </v-card>
     </v-dialog>
-
+    
     <v-dialog v-model="notloggedin" persistent>
       <v-card @click="login" class="pb-3">
         <div class="d-flex justify-center align-center">
@@ -64,11 +64,6 @@
             <v-card-subtitle>판교고 계정으로 로그인하기</v-card-subtitle>
           </div>
         </div>
-
-        <v-card-text v-if="account?.displayName">
-          학번 + 이름: {{ account?.displayName }}<br />
-          소속 동아리: {{ checkIfMember(account?.displayName) }}
-        </v-card-text>
       </v-card>
     </v-dialog>
 
@@ -167,11 +162,19 @@ const login = async () => {
       account.value = user;
 
       if (!user?.email?.includes("pangyo.hs.kr")) return;
+      if (account.value == null) {
+        notloggedin.value = true;
+      } else {
+        notloggedin.value = false;
+        window.reload()
+      }
     })
   );
 
   if (checkIfMember(account.value.displayName) === clubName) {
     matched.value = true;
+  } else {
+    matched.value = false;
   }
 
   const type = dbRef($db, `/everyone/${user?.displayName}/type`);
@@ -181,7 +184,6 @@ const login = async () => {
     matched.value = false;
   }
 
-  notloggedin.value = false;
 };
 
 onMounted(async () => {

@@ -85,6 +85,15 @@
         </template>
       </v-main>
     </NuxtLayout>
+
+    <v-footer v-if="route.path.includes('survey')" app class="bg-indigo-lighten-1 text-center d-flex flex-column">
+      <v-row justify="center">
+        <v-col>
+          <v-footer-title>이현승 개발 - </v-footer-title>
+          <v-footer-title>동아리 @코딩인싸이트</v-footer-title>
+        </v-col>
+      </v-row>
+    </v-footer>
   </v-app>
 </template>
 
@@ -106,7 +115,7 @@ onMounted(() => {
     account.value = user;
 
     if (account.value === null) {
-      return
+      return;
     }
 
     const type = dbRef($db, `/everyone/${user?.displayName}/type`);

@@ -1,16 +1,11 @@
 <template>
-  <div class="mx-4" style="width: 100%">
-    <br />
-
-    <h1 class="text-center">{{ clubName }}</h1>
-    <h3 class="text-center">
-      {{ clubInfo.leader }} ·
-      {{ clubInfo.coleader }}
+  <div class="page-container mx-4">
+    <h1 class="text-center club-title">{{ clubName }}</h1>
+    <h3 class="text-center club-leaders">
+      {{ clubInfo?.leader }} · {{ clubInfo?.coleader }}
     </h3>
 
-    <br />
-
-    <div class="d-flex justify-center">
+    <div class="d-flex justify-center my-4">
       <v-rating
         :model-value="
           roundRating(listInfo.totalAccumulation, listInfo.totalCount)
@@ -22,11 +17,11 @@
       ></v-rating>
     </div>
 
-    <v-table style="border: 1px solid black" class="rounded-lg">
+    <v-table class="club-info-table rounded-lg">
       <thead>
-        <tr style="background-color: skyblue">
-          <th style="min-width: 100px">카테고리</th>
-          <th>정보</th>
+        <tr>
+          <th class="text-center">카테고리</th>
+          <th class="text-center">정보</th>
         </tr>
       </thead>
       <tbody>
@@ -47,30 +42,43 @@
       </tbody>
     </v-table>
 
-    <br /><br />
-
-    <h2 class="text-center mb-2">후기 보기</h2>
-    <v-card
-      v-for="(review, index) in Object.values(listInfo.list ?? {})"
-      :key="Object.keys(listInfo.list ?? {})[index]"
-      variant="outlined"
-    >
-      <template v-slot:prepend>
-        <img :src="review.photoURL" style="width: 50px; height: 50px" />
-      </template>
-      <template v-slot:title>
-        <v-card-title>
+    <h2 class="text-center reviews-title">후기 보기</h2>
+    <div class="reviews-section">
+      <v-card
+        v-for="(review, index) in Object.values(listInfo.list ?? {})"
+        :key="Object.keys(listInfo.list ?? {})[index]"
+        variant="outlined"
+        class="review-card"
+      >
+        <template v-slot:prepend>
+          <img :src="review.photoURL" class="review-image" />
+        </template>
+        <v-card-title class="review-text">
           {{ review.review }}
         </v-card-title>
-        <v-card-subtitle> 평점: {{ review.rating }} </v-card-subtitle>
-      </template>
-    </v-card>
+        <v-card-subtitle class="review-rating"
+          >평점: {{ review.rating }}점</v-card-subtitle
+        >
+      </v-card>
+    </div>
+
+    <br /><br />
+
+    <v-card
+      variant="tonal"
+      prepend-icon="mdi-chevron-left"
+      title="다른 동아리 설문 결과"
+      subtitle="돌아가기"
+      to="/survey/result"
+    ></v-card>
+
+    <br /><br />
   </div>
 </template>
 
 <script setup>
-import { get } from "firebase/database";
 import { onAuthStateChanged } from "firebase/auth";
+import { ref as dbRef, onValue } from "firebase/database";
 
 const clubInfo = ref({
   leader: "",
@@ -84,12 +92,15 @@ const joining = ref({
   photoURL: "",
 });
 const typeofAccount = ref("");
-const dialog = ref(false);
 
 const { $auth, $db } = useNuxtApp();
 const route = useRoute();
 const clubName = route.query.clubname;
 const place = route.query.place;
+
+function roundRating(totalAccumulation, totalCount) {
+  return totalCount ? (totalAccumulation / totalCount).toFixed(1) : 0;
+}
 
 onMounted(async () => {
   onAuthStateChanged($auth, (user) => {
@@ -115,3 +126,88 @@ onMounted(async () => {
   });
 });
 </script>
+
+<style scoped>
+.page-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 16px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+
+.club-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 16px;
+  color: #333;
+}
+
+.club-leaders {
+  font-size: 16px;
+  font-weight: 500;
+  color: #555;
+  margin-top: 4px;
+}
+
+.club-info-table {
+  width: 100%;
+  margin-top: 20px;
+  background-color: #fff;
+  border-collapse: collapse;
+}
+
+.club-info-table th {
+  background-color: skyblue;
+  font-weight: bold;
+  padding: 8px;
+  text-align: center;
+  border: 1px solid #ccc;
+}
+
+.club-info-table td {
+  padding: 8px;
+  text-align: center;
+  border: 1px solid #ccc;
+  color: #555;
+}
+
+.reviews-title {
+  font-size: 20px;
+  font-weight: 500;
+  color: #333;
+  margin: 24px 0 16px;
+}
+
+.reviews-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.review-card {
+  padding: 12px;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.review-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.review-text {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+}
+
+.review-rating {
+  font-size: 14px;
+  color: #777;
+  margin-top: 4px;
+}
+</style>

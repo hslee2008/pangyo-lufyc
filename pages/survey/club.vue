@@ -1,22 +1,25 @@
 <template>
-  <div class="mx-4" style="width: 100%">
-    <br />
-
-    <h1 class="text-center">{{ clubName }}</h1>
-    <h3 class="text-center">
-      {{ clubInfo.leader }} ·
-      {{ clubInfo.coleader }}
+  <div class="page-container mx-4">
+    <h1 class="text-center club-title">{{ clubName }}</h1>
+    <h3 class="text-center club-leaders">
+      {{ clubInfo.leader }} · {{ clubInfo.coleader }}
     </h3>
 
-    <br />
-
-    <div>
+    <div v-if="clubInfo.description" class="club-description">
       {{ clubInfo.description }}
     </div>
 
     <br />
 
-    <div class="text-center">
+    <v-card
+      variant="tonal"
+      prepend-icon="mdi-clipboard-list"
+      title="동아리 페이지"
+      subtitle="추가 정보 확인하기"
+      :to="`/clubinfo/?clubname=${clubName}`"
+    ></v-card>
+
+    <div class="review-section text-center">
       <v-rating
         v-model="rating"
         size="x-large"
@@ -25,55 +28,46 @@
         color="amber"
       ></v-rating>
 
-      <br />
-
       <v-textarea
         v-model="review"
         variant="outlined"
         placeholder="후기를 남겨주세요"
+        class="review-textarea"
       ></v-textarea>
-
-      <br />
 
       <v-btn color="primary" block rounded @click="submit">제출</v-btn>
     </div>
 
-    <br />
-
     <v-dialog v-model="dialog" persistent max-width="290">
-      <v-card class="pt-3">
-        <v-card-title class="text-center text-h5">
-          설문이 끝났습니다
-        </v-card-title>
-        <v-card-text>
-          <v-btn class="mb-2" color="green" block rounded to="/survey/result"
+      <v-card class="confirmation-dialog">
+        <v-card-title class="text-center">설문이 끝났습니다</v-card-title>
+        <v-card-text class="dialog-actions">
+          <v-btn color="green" block rounded to="/survey/result"
             >결과보기</v-btn
           >
           <v-btn color="primary" block rounded to="/survey/select">닫기</v-btn>
         </v-card-text>
       </v-card>
     </v-dialog>
-    
+
     <v-dialog v-model="notloggedin" persistent>
-      <v-card @click="login" class="pb-3">
-        <div class="d-flex justify-center align-center">
-          <div>
-            <v-card-title>
-              <v-icon start>mdi-google</v-icon> 로그인하기
-            </v-card-title>
-            <v-card-subtitle>판교고 계정으로 로그인하기</v-card-subtitle>
-          </div>
-        </div>
+      <v-card @click="login" class="login-dialog">
+        <v-card-title class="text-center">
+          <v-icon start>mdi-google</v-icon> 로그인하기
+        </v-card-title>
+        <v-card-subtitle class="text-center"
+          >판교고 계정으로 로그인하기</v-card-subtitle
+        >
       </v-card>
     </v-dialog>
 
     <v-dialog v-model="matched" persistent>
-      <v-card @click="login">
+      <v-card>
         <v-card-title class="text-center">
           자신의 동아리에 설문 참여 불가
         </v-card-title>
         <v-card-text>
-          <v-table>
+          <v-table class="user-info-table">
             <tbody>
               <tr>
                 <td>학번, 이름</td>
@@ -86,7 +80,6 @@
             </tbody>
           </v-table>
         </v-card-text>
-
         <v-card-actions class="d-flex justify-center">
           <v-btn color="primary" black variant="tonal" to="/survey/select">
             다른 동아리 검색하기
@@ -166,7 +159,7 @@ const login = async () => {
         notloggedin.value = true;
       } else {
         notloggedin.value = false;
-        window.reload()
+        window.reload();
       }
     })
   );
@@ -183,7 +176,6 @@ const login = async () => {
   if (account.value.accountType === "teacher") {
     matched.value = false;
   }
-
 };
 
 onMounted(async () => {
@@ -200,10 +192,6 @@ onMounted(async () => {
       }
     );
 
-    console.log(account.value?.displayName);
-    console.log(checkIfMember(account.value?.displayName));
-    console.log(clubName);
-    console.log(checkIfMember(account.value?.displayName) === clubName);
     if (checkIfMember(account.value?.displayName) === clubName) {
       matched.value = true;
     }
@@ -225,3 +213,75 @@ onMounted(async () => {
   });
 });
 </script>
+
+<style scoped>
+.page-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 16px;
+  background-color: #fafafa;
+  border-radius: 8px;
+}
+
+.club-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 16px;
+  color: #333;
+}
+
+.club-leaders {
+  font-size: 16px;
+  font-weight: 500;
+  color: #555;
+  margin-top: 4px;
+}
+
+.club-description {
+  font-size: 14px;
+  color: #666;
+  margin: 16px 0;
+  padding: 12px;
+  background-color: #f1f1f1;
+  border-radius: 4px;
+}
+
+.review-section {
+  margin-top: 20px;
+}
+
+.review-textarea {
+  width: 100%;
+  margin-top: 12px;
+  background-color: #fff;
+  border-radius: 4px;
+}
+
+.v-btn {
+  margin-top: 16px;
+}
+
+.confirmation-dialog,
+.login-dialog {
+  padding: 16px;
+  background-color: #fff;
+  border-radius: 8px;
+}
+
+.dialog-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.user-info-table td {
+  padding: 8px;
+  color: #333;
+}
+
+.v-btn[block] {
+  width: 100%;
+  margin-top: 8px;
+}
+</style>

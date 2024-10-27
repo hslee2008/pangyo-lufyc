@@ -1,6 +1,7 @@
 <template>
   <div class="mx-4 d-flex justify-center align-center" style="height: 50vh">
     <div>
+      <p class="text-center">판교고 동아리 발표회</p>
       <v-autocomplete
         :items="items"
         density="comfortable"
@@ -13,6 +14,7 @@
         auto-select-first
         item-props
         rounded
+        no-data-text="검색 결과가 없습니다."
       ></v-autocomplete>
     </div>
   </div>
@@ -37,8 +39,8 @@ const items = [
     to: "/survey/club/?clubname=다이나믹스",
   },
   {
-    title: "래브",
-    to: "/survey/club/?clubname=래브",
+    title: "레브",
+    to: "/survey/club/?clubname=레브",
   },
   {
     title: "렙토피아",

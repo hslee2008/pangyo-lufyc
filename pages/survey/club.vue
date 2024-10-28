@@ -28,15 +28,17 @@
         color="amber"
       ></v-rating>
 
-      <p class="text-left">
-        후기를 남기면 학번, 이름이 공개됩니다. 평점은 공개되지 않습니다.
-      </p>
       <v-textarea
         v-model="review"
         variant="outlined"
         placeholder="후기를 남겨주세요"
         class="review-textarea"
       ></v-textarea>
+      <v-alert class="text-left">
+        후기를 남기면 학번, 이름이 공개됩니다. 평점은 공개되지 않습니다.
+      </v-alert>
+
+      <br />
 
       <v-btn color="primary" block rounded @click="submit">제출</v-btn>
     </div>
@@ -77,7 +79,7 @@
     <v-dialog v-model="matched" persistent>
       <v-card>
         <v-card-title class="text-center">
-          자신의 동아리에 설문 참여 불가
+          소속 동아리 설문 참여 불가
         </v-card-title>
         <v-card-text>
           <v-table class="user-info-table">
@@ -93,10 +95,14 @@
             </tbody>
           </v-table>
         </v-card-text>
-        <v-card-actions class="d-flex justify-center">
-          <v-btn color="primary" black variant="tonal" to="/survey/select">
-            다른 동아리 검색하기
-          </v-btn>
+        <v-card-actions class="mb-3 d-flex justify-center">
+          <v-card
+            variant="tonal"
+            prepend-icon="mdi-open-in-new"
+            title="다른 동아리"
+            subtitle="다른 동아리 설문하기"
+            to="/survey/select"
+          ></v-card>
         </v-card-actions>
       </v-card>
     </v-dialog>

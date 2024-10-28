@@ -5,6 +5,12 @@
       {{ clubInfo?.leader }} · {{ clubInfo?.coleader }}
     </h3>
 
+    <br />
+
+    <div v-if="clubInfo.description" class="club-description">
+      {{ clubInfo.description }}
+    </div>
+
     <div class="d-flex justify-center my-4">
       <v-rating
         :model-value="
@@ -45,7 +51,13 @@
     <br /><br />
 
     <h2 class="text-center reviews-title">후기 보기</h2>
-    <div class="reviews-section">
+    <div
+      v-if="
+        Object.values(listInfo.list ?? {}).filter((review) => review.review)
+          .length > 0
+      "
+      class="reviews-section"
+    >
       <v-card
         v-for="(review, index) in Object.values(listInfo.list ?? {})"
         v-show="review.review"
@@ -70,6 +82,9 @@
         </template>
       </v-card>
     </div>
+    <v-card v-else variant="tonal">
+      <v-card-title class="text-center">후기가 아직 없습니다.</v-card-title>
+    </v-card>
 
     <br /><br />
     <br /><br />

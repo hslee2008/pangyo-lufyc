@@ -1,7 +1,17 @@
 <template>
-  <div class="mx-4 d-flex justify-center align-center" style="height: 50vh">
+  <div class="mx-4">
     <div>
-      <p class="text-center">판교고 동아리 발표회</p>
+      <br /><br />
+
+      <div class="d-flex justify-center align-center">
+        <div class="text-center">
+          <v-img src="https://pangyo-lufyc.web.app/PGHS.png" width="75" class="ma-auto mb-2"></v-img>
+          <p>판교고 동아리 발표회</p>
+        </div>
+      </div>
+
+      <br />
+
       <v-autocomplete
         :items="items"
         density="comfortable"

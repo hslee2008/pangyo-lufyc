@@ -85,23 +85,6 @@
         </template>
       </v-main>
     </NuxtLayout>
-
-    <v-footer
-      v-if="route.path.includes('survey')"
-      app
-      class="bg-indigo-lighten-1 text-center d-flex flex-column"
-    >
-      <v-row justify="center">
-        <v-col>
-          <v-footer-title>
-            동아리
-            <NuxtLink to="/clubinfo?clubname=코딩인싸이트" class="text-white">
-              @코딩인싸이트
-            </NuxtLink>
-          </v-footer-title>
-        </v-col>
-      </v-row>
-    </v-footer>
   </v-app>
 </template>
 

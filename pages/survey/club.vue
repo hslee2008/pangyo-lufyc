@@ -28,6 +28,9 @@
         color="amber"
       ></v-rating>
 
+      <p class="text-left">
+        후기를 남기면 학번, 이름이 공개됩니다. 평점은 공개되지 않습니다.
+      </p>
       <v-textarea
         v-model="review"
         variant="outlined"
@@ -38,14 +41,23 @@
       <v-btn color="primary" block rounded @click="submit">제출</v-btn>
     </div>
 
-    <v-dialog v-model="dialog" persistent max-width="290">
+    <v-dialog v-model="dialog" persistent>
       <v-card class="confirmation-dialog">
         <v-card-title class="text-center">설문이 끝났습니다</v-card-title>
         <v-card-text class="dialog-actions">
-          <v-btn color="green" block rounded to="/survey/result"
-            >결과보기</v-btn
-          >
-          <v-btn color="primary" block rounded to="/survey/select">닫기</v-btn>
+          <v-card
+            variant="tonal"
+            prepend-icon="mdi-link"
+            title="설문 결과 보기"
+            subtitle="다른 동아리 설문 보기"
+            to="/survey/result"
+          ></v-card>
+          <v-card
+            variant="tonal"
+            prepend-icon="mdi-chevron-left"
+            title="돌아가기"
+            to="/survey/select"
+          ></v-card>
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -55,9 +67,10 @@
         <v-card-title class="text-center">
           <v-icon start>mdi-google</v-icon> 로그인하기
         </v-card-title>
-        <v-card-subtitle class="text-center"
-          >판교고 계정으로 로그인하기</v-card-subtitle
-        >
+        <v-card-subtitle class="text-center mb-3">
+          판교고 계정으로 로그인하기.<br />
+          다른 계정이면 로그인할 수 없습니다.
+        </v-card-subtitle>
       </v-card>
     </v-dialog>
 
@@ -97,6 +110,8 @@ import {
   signInWithPopup,
   onAuthStateChanged,
 } from "firebase/auth";
+
+const router = useRouter();
 
 const clubInfo = ref({
   leader: "",
@@ -159,7 +174,7 @@ const login = async () => {
         notloggedin.value = true;
       } else {
         notloggedin.value = false;
-        window.reload();
+        router.go(0);
       }
     })
   );
@@ -220,7 +235,6 @@ onMounted(async () => {
   max-width: 600px;
   margin: 0 auto;
   padding: 16px;
-  background-color: #fafafa;
   border-radius: 8px;
 }
 

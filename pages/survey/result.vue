@@ -9,6 +9,7 @@
         title="다른 동아리 평가하기"
         subtitle="동아리 발표회에 참여하세요"
         to="/survey/select"
+        width="100%"
       ></v-card>
     </div>
 
@@ -25,17 +26,10 @@
           name + 1
         }`"
         class="club-card top"
+        variant="outlined"
         :style="`border-color: ${getColor(name)}`"
       >
-        <v-img
-          :src="
-            club[Object.keys(list ?? {})[name]]?.image ??
-            'https://seongnam.grandculture.net/Image?localName=seongnam&id=GC001P3593&t=middle'
-          "
-          class="club-image"
-          cover
-        ></v-img>
-        <v-card-title class="club-name">{{
+        <v-card-title class="club-name text-h4">{{
           Object.keys(list ?? {})[name]
         }}</v-card-title>
         <v-rating
@@ -49,7 +43,7 @@
         <v-card-subtitle class="club-info">
           <div>
             <span class="label">등수:</span>
-            <span class="value">{{ name + 1 }}위</span>
+            <span class="value"><mark>{{ name + 1 }}등</mark></span>
           </div>
           <div>
             <span class="label">평균 평점:</span>
@@ -65,6 +59,8 @@
       </v-card>
     </div>
 
+    <br /><br />
+
     <div class="other-clubs">
       <v-card
         v-for="(item, name) in Object.values(list ?? {}).slice(3)"
@@ -73,22 +69,23 @@
           Object.keys(list ?? {})[name + 3]
         }&place=${name + 4}`"
         class="club-card"
+        variant="outlined"
       >
-        <v-img
-          :src="
-            club[Object.keys(list ?? {})[name + 3]]?.image ??
-            'https://seongnam.grandculture.net/Image?localName=seongnam&id=GC001P3593&t=middle'
-          "
-          class="club-image"
-          cover
-        ></v-img>
-        <v-card-title class="club-name">{{
+        <v-card-title class="club-name text-h4">{{
           Object.keys(list ?? {})[name + 3]
         }}</v-card-title>
+        <v-rating
+          :model-value="roundRating(item.totalAccumulation, item.totalCount)"
+          color="amber"
+          readonly
+          half-increments
+          size="small"
+          class="rating"
+        ></v-rating>
         <v-card-subtitle class="club-info">
           <div>
             <span class="label">등수:</span>
-            <span class="value">{{ name + 4 }}위</span>
+            <span class="value"><mark>{{ name + 4 }}등</mark></span>
           </div>
           <div>
             <span class="label">평균 평점:</span>
@@ -118,28 +115,26 @@ const club = ref("");
 const account = ref(null);
 
 const fetchData = async () => {
-  try {
-    const clubRef = dbRef($db, "survey");
-    const surveyData = await new Promise((resolve) => {
-      onValue(clubRef, (snapshot) => resolve(snapshot.val()));
-    });
+  const clubRef = dbRef($db, "survey");
+  const surveyData = await new Promise((resolve) => {
+    onValue(clubRef, (snapshot) => resolve(snapshot.val()));
+  });
 
-    const clubsRef = dbRef($db, "clubs");
-    const clubsData = await new Promise((resolve) => {
-      onValue(clubsRef, (snapshot) => resolve(snapshot.val()));
-    });
+  const clubsRef = dbRef($db, "clubs");
+  const clubsData = await new Promise((resolve) => {
+    onValue(clubsRef, (snapshot) => resolve(snapshot.val()));
+  });
 
-    const sortedEntries = Object.entries(surveyData).sort(([, a], [, b]) => {
+  const sortedEntries = Object.entries(surveyData)
+    .sort(([, a], [, b]) => b.totalCount - a.totalCount)
+    .sort(([, a], [, b]) => {
       return (
         b.totalAccumulation / b.totalCount - a.totalAccumulation / a.totalCount
       );
     });
 
-    list.value = Object.fromEntries(sortedEntries);
-    club.value = clubsData;
-  } catch (error) {
-    console.error("Error fetching data:", error);
-  }
+  list.value = Object.fromEntries(sortedEntries);
+  club.value = clubsData;
 };
 
 const getColor = (rank) => {
@@ -177,9 +172,7 @@ h1 {
   max-width: 300px;
   margin-bottom: 16px;
   padding: 8px;
-  background-color: #f9f9f9;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease;
 }
 
@@ -215,6 +208,7 @@ h1 {
   text-align: center;
   color: #444;
   margin-top: 8px;
+  margin-bottom: 15px;
   line-height: 1.4;
 }
 

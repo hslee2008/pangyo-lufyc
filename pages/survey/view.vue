@@ -1,6 +1,6 @@
 <template>
   <div class="page-container mx-4">
-    <h1 class="text-center club-title">{{ clubName }}</h1>
+    <h1 class="text-center">{{ clubName }}</h1>
     <h3 class="text-center club-leaders">
       {{ clubInfo?.leader }} · {{ clubInfo?.coleader }}
     </h3>
@@ -42,26 +42,36 @@
       </tbody>
     </v-table>
 
+    <br /><br />
+
     <h2 class="text-center reviews-title">후기 보기</h2>
     <div class="reviews-section">
       <v-card
         v-for="(review, index) in Object.values(listInfo.list ?? {})"
+        v-show="review.review"
         :key="Object.keys(listInfo.list ?? {})[index]"
-        variant="outlined"
+        variant="tonal"
         class="review-card"
       >
         <template v-slot:prepend>
-          <img :src="review.photoURL" class="review-image" />
+          <img
+            :src="review.photoURL"
+            class="review-image mr-3"
+            style="outline: 1px solid black"
+          />
         </template>
-        <v-card-title class="review-text">
-          {{ review.review }}
-        </v-card-title>
-        <v-card-subtitle class="review-rating"
-          >평점: {{ review.rating }}점</v-card-subtitle
-        >
+        <template v-slot:title>
+          <v-card-subtitle>
+            {{ review.name }}
+          </v-card-subtitle>
+          <v-card-title class="review-text">
+            {{ review.review }}adf
+          </v-card-title>
+        </template>
       </v-card>
     </div>
 
+    <br /><br />
     <br /><br />
 
     <v-card
@@ -133,7 +143,6 @@ onMounted(async () => {
   max-width: 600px;
   margin: 0 auto;
   padding: 16px;
-  background-color: #f9f9f9;
   border-radius: 8px;
 }
 

@@ -1,12 +1,12 @@
 <template>
   <div class="page-container mx-4">
-    <h1 class="text-center club-title">{{ clubName }}</h1>
+    <h1 class="text-center club-title">{{ clubNames[0] }}</h1>
     <h3 class="text-center club-leaders">
-      {{ clubInfo.leader }} · {{ clubInfo.coleader }}
+      {{ clubInfo?.leader }} · {{ clubInfo?.coleader }}
     </h3>
 
     <div v-if="clubInfo.description" class="club-description">
-      {{ clubInfo.description }}
+      {{ clubInfo?.description }}
       <br />
     </div>
 
@@ -21,6 +21,39 @@
 
       <v-textarea
         v-model="review"
+        variant="outlined"
+        placeholder="후기를 남겨주세요"
+        class="review-textarea"
+      ></v-textarea>
+      <v-alert class="text-left">
+        후기를 남기면 학번, 이름이 공개됩니다. 평점은 공개되지 않습니다.
+      </v-alert>
+    </div>
+
+    <br /><br />
+    <br /><br />
+
+    <h1 class="text-center club-title">{{ clubNames[1] }}</h1>
+    <h3 class="text-center club-leaders">
+      {{ clubInfo2.leader }} · {{ clubInfo2.coleader }}
+    </h3>
+
+    <div v-if="clubInfo2.description" class="club-description">
+      {{ clubInfo2.description }}
+      <br />
+    </div>
+
+    <div class="review-section text-center">
+      <v-rating
+        v-model="rating2"
+        size="x-large"
+        clearable
+        half-increments
+        color="amber"
+      ></v-rating>
+
+      <v-textarea
+        v-model="review2"
         variant="outlined"
         placeholder="후기를 남겨주세요"
         class="review-textarea"
@@ -108,31 +141,37 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 
-const router = useRouter();
+let router = useRouter();
 
-const clubInfo = ref({
+let clubInfo = ref({
   leader: "",
   coleader: "",
 });
-const rating = ref(0);
-const account = ref(null);
-const joining = ref({
+let clubInfo2 = ref({
+  leader: "",
+  coleader: "",
+});
+let account = ref(null);
+let joining = ref({
   name: "",
   email: "",
   photoURL: "",
 });
-const typeofAccount = ref("");
-const review = ref("");
-const dialog = ref(false);
-const notloggedin = ref(false);
-const matched = ref(false);
+let typeofAccount = ref("");
+let rating = ref(0);
+let review = ref("");
+let rating2 = ref(0);
+let review2 = ref("");
+let dialog = ref(false);
+let notloggedin = ref(false);
+let matched = ref(false);
 
-const { $auth, $db } = useNuxtApp();
-const route = useRoute();
-const clubName = route.query.clubname;
+let { $auth, $db } = useNuxtApp();
+let route = useRoute();
+let clubNames = route.query.clubname.toString().split(" ");
 
-function submit() {
-  const surveyed = dbRef($db, `survey/${clubName}/list/${account.value.uid}`);
+async function submit() {
+  let surveyed = dbRef($db, `survey/${clubNames[0]}/list/${account.value.uid}`);
   set(surveyed, {
     name: joining.value.name,
     email: joining.value?.email,
@@ -141,26 +180,51 @@ function submit() {
     review: review.value,
   });
 
-  const tc = dbRef($db, `survey/${clubName}/totalCount`);
-  const ta = dbRef($db, `survey/${clubName}/totalAccumulation`);
+  let tc = dbRef($db, `survey/${clubNames[0]}/totalCount`);
+  let ta = dbRef($db, `survey/${clubNames[0]}/totalAccumulation`);
 
-  get(tc).then((snapshot) => {
-    const count = snapshot.val();
+  await get(tc).then((snapshot) => {
+    let count = snapshot.val();
     if (count === null) set(tc, 1);
     else set(tc, count + 1);
   });
 
-  get(ta).then((snapshot) => {
-    const accumulation = snapshot.val();
-    if (accumulation === null) set(ta, rating.value);
-    else set(ta, accumulation + rating.value);
+  await get(ta).then((snapshot) => {
+    let accumulation = snapshot.val();
+    if (accumulation === null) {
+      set(ta, rating.value);
+    } else set(ta, accumulation + rating.value);
+  });
+
+  surveyed = dbRef($db, `survey/${clubNames[1]}/list/${account.value.uid}`);
+  set(surveyed, {
+    name: joining.value.name,
+    email: joining.value?.email,
+    photoURL: joining.value?.photoURL,
+    rating: rating2.value,
+    review: review2.value,
+  });
+
+  tc = dbRef($db, `survey/${clubNames[1]}/totalCount`);
+  ta = dbRef($db, `survey/${clubNames[1]}/totalAccumulation`);
+
+  await get(tc).then((snapshot) => {
+    let count = snapshot.val();
+    if (count === null) set(tc, 1);
+    else set(tc, count + 1);
+  });
+
+  await get(ta).then((snapshot) => {
+    let accumulation = snapshot.val();
+    if (accumulation === null) set(ta, rating2.value);
+    else set(ta, accumulation + rating2.value);
   });
 
   dialog.value = true;
 }
 
-const login = async () => {
-  const provider = new GoogleAuthProvider();
+let login = async () => {
+  let provider = new GoogleAuthProvider();
 
   signInWithPopup($auth, provider).then(() =>
     onAuthStateChanged($auth, async (user) => {
@@ -176,13 +240,16 @@ const login = async () => {
     })
   );
 
-  if (checkIfMember(account.value.displayName) === clubName) {
+  if (
+    checkIfMember(account.value.displayName) === clubNames[0] ||
+    checkIfMember(account.value.displayName) === clubNames[1]
+  ) {
     matched.value = true;
   } else {
     matched.value = false;
   }
 
-  const type = dbRef($db, `/everyone/${user?.displayName}/type`);
+  let type = dbRef($db, `/everyone/${user?.displayName}/type`);
   onValue(type, (snapshot) => (typeofAccount.value = snapshot.val()));
 
   if (account.value.accountType === "teacher") {
@@ -204,8 +271,13 @@ onMounted(async () => {
       }
     );
 
-    if (checkIfMember(account.value?.displayName) === clubName) {
+    if (
+      checkIfMember(account.value.displayName) === clubNames[0] ||
+      checkIfMember(account.value.displayName) === clubNames[1]
+    ) {
       matched.value = true;
+    } else {
+      matched.value = false;
     }
 
     if (account.value == null) {
@@ -213,12 +285,23 @@ onMounted(async () => {
     }
   });
 
-  const clubRef = dbRef($db, `clubs/${clubName}`);
+  let clubRef = dbRef($db, `clubs/${clubNames[0]}`);
   await onValue(clubRef, (snapshot) => (clubInfo.value = snapshot.val()));
 
-  const listRef = dbRef($db, `survey/${clubName}/list`);
+  let listRef = dbRef($db, `survey/${clubNames[0]}/list`);
   await onValue(listRef, (snapshot) => {
-    const list = snapshot.val();
+    let list = snapshot.val();
+    if (list !== null && list[account.value.uid] !== undefined) {
+      dialog.value = true;
+    }
+  });
+
+  clubRef = dbRef($db, `clubs/${clubNames[1]}`);
+  await onValue(clubRef, (snapshot) => (clubInfo2.value = snapshot.val()));
+
+  listRef = dbRef($db, `survey/${clubNames[1]}/list`);
+  await onValue(listRef, (snapshot) => {
+    let list = snapshot.val();
     if (list !== null && list[account.value.uid] !== undefined) {
       dialog.value = true;
     }

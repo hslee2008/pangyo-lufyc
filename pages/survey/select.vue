@@ -5,7 +5,11 @@
 
       <div class="d-flex justify-center align-center">
         <div class="text-center">
-          <v-img src="https://pangyo-lufyc.web.app/PGHS.png" width="75" class="ma-auto mb-2"></v-img>
+          <v-img
+            src="https://pangyo-lufyc.web.app/PGHS.png"
+            width="75"
+            class="ma-auto mb-2"
+          ></v-img>
           <p>판교고 동아리 발표회</p>
         </div>
       </div>
@@ -57,12 +61,8 @@ const items = [
     to: "/survey/club/?clubname=렙토피아",
   },
   {
-    title: "머큐리",
-    to: "/survey/club/?clubname=머큐리",
-  },
-  {
-    title: "바이오메드",
-    to: "/survey/club/?clubname=바이오메드",
+    title: "머큐리 + 바이오메드",
+    to: "/survey/joint/?clubname=머큐리+바이오메드",
   },
   {
     title: "방송부",
@@ -105,8 +105,8 @@ const items = [
     to: "/survey/club/?clubname=영화를 적시다",
   },
   {
-    title: "요리풍 조리풍",
-    to: "/survey/club/?clubname=요리풍 조리풍",
+    title: "요리퐁 조리퐁",
+    to: "/survey/club/?clubname=요리퐁 조리퐁",
   },
   {
     title: "잭팟",

@@ -1,5 +1,17 @@
 <template>
   <div class="page-container mx-4">
+    <br /><br />
+    
+    <v-card
+      variant="tonal"
+      prepend-icon="mdi-chevron-left"
+      title="다른 동아리 설문 결과"
+      subtitle="돌아가기"
+      to="/survey/result"
+    ></v-card>
+
+    <br /><br />
+
     <h1 class="text-center">{{ clubName }}</h1>
     <h3 class="text-center club-leaders">
       {{ clubInfo?.leader }} · {{ clubInfo?.coleader }}
@@ -85,17 +97,6 @@
     <v-card v-else variant="tonal">
       <v-card-title class="text-center">후기가 아직 없습니다.</v-card-title>
     </v-card>
-
-    <br /><br />
-    <br /><br />
-
-    <v-card
-      variant="tonal"
-      prepend-icon="mdi-chevron-left"
-      title="다른 동아리 설문 결과"
-      subtitle="돌아가기"
-      to="/survey/result"
-    ></v-card>
 
     <br /><br />
   </div>

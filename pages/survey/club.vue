@@ -1,7 +1,10 @@
 <template>
   <div class="page-container mx-4">
     <h1 class="text-center club-title">{{ clubName }}</h1>
-    <h3 v-if="clubName === '머큐리 바이오메드'" class="text-center club-leaders">
+    <h3
+      v-if="clubName === '머큐리 바이오메드'"
+      class="text-center club-leaders"
+    >
       2109 백승휴 / 2827 한재윤 · 2313 복진서 / 2725 최인용
     </h3>
     <h3 v-else class="text-center club-leaders">
@@ -179,7 +182,10 @@ const login = async () => {
     })
   );
 
-  if (checkIfMember(account.value.displayName) === clubName) {
+  if (
+    checkIfMember(account.value.displayName) === clubName ||
+    clubName.includes(checkIfMember(account.value.displayName))
+  ) {
     matched.value = true;
   } else {
     matched.value = false;
@@ -207,8 +213,13 @@ onMounted(async () => {
       }
     );
 
-    if (checkIfMember(account.value?.displayName) === clubName) {
+    if (
+      checkIfMember(account.value.displayName) === clubName ||
+      clubName.includes(checkIfMember(account.value.displayName))
+    ) {
       matched.value = true;
+    } else {
+      matched.value = false;
     }
 
     if (account.value == null) {

@@ -75,4 +75,10 @@ export default defineNuxtConfig({
       type: "module",
     },
   },
+
+  nitro: {
+    prerender: {
+      failOnError: false,
+    },
+  },
 });

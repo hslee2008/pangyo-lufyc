@@ -89,8 +89,8 @@ const items = [
     to: "/survey/club/?clubname=심장박동",
   },
   {
-    title: "알뜰리에",
-    to: "/survey/club/?clubname=알뜰리에",
+    title: "아뜰리에",
+    to: "/survey/club/?clubname=아뜰리에",
   },
   {
     title: "아트 캔버스",

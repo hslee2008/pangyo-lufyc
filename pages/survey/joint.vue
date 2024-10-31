@@ -241,8 +241,8 @@ let login = async () => {
   );
 
   if (
-    checkIfMember(account.value.displayName) === clubNames[0] ||
-    checkIfMember(account.value.displayName) === clubNames[1]
+    checkIfMember(account.value?.displayName) === clubNames[0] ||
+    checkIfMember(account.value?.displayName) === clubNames[1]
   ) {
     matched.value = true;
   } else {
@@ -259,6 +259,10 @@ let login = async () => {
 
 onMounted(async () => {
   onAuthStateChanged($auth, (user) => {
+    if (user == null) {
+      notloggedin.value = true;
+    }
+
     account.value = user;
     joining.value.name = user?.displayName;
     joining.value.email = user?.email;
@@ -278,10 +282,6 @@ onMounted(async () => {
       matched.value = true;
     } else {
       matched.value = false;
-    }
-
-    if (account.value == null) {
-      notloggedin.value = true;
     }
   });
 

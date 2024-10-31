@@ -62,7 +62,7 @@ const items = [
   },
   {
     title: "머큐리 + 바이오메드",
-    to: "/survey/joint/?clubname=머큐리+바이오메드",
+    to: "/survey/club/?clubname=머큐리+바이오메드",
   },
   {
     title: "방송부",

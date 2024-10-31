@@ -43,7 +43,9 @@
         <v-card-subtitle class="club-info">
           <div>
             <span class="label">등수:</span>
-            <span class="value"><mark>{{ name + 1 }}등</mark></span>
+            <span class="value"
+              ><mark>{{ name + 1 }}등</mark></span
+            >
           </div>
           <div>
             <span class="label">평균 평점:</span>
@@ -71,9 +73,12 @@
         class="club-card"
         variant="outlined"
       >
-        <v-card-title class="club-name text-h4">{{
-          Object.keys(list ?? {})[name + 3]
-        }}</v-card-title>
+        <p
+          v-for="item in Object.keys(list ?? {})[name + 3].split(' ')"
+          class="club-name text-h4"
+        >
+          {{ item }}
+        </p>
         <v-rating
           :model-value="roundRating(item.totalAccumulation, item.totalCount)"
           color="amber"
@@ -85,7 +90,9 @@
         <v-card-subtitle class="club-info">
           <div>
             <span class="label">등수:</span>
-            <span class="value"><mark>{{ name + 4 }}등</mark></span>
+            <span class="value"
+              ><mark>{{ name + 4 }}등</mark></span
+            >
           </div>
           <div>
             <span class="label">평균 평점:</span>
@@ -221,5 +228,9 @@ h1 {
 
 .club-info .value {
   color: #333;
+}
+
+.text-h4 {
+  font-size: 30px !important;
 }
 </style>

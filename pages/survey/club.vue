@@ -2,11 +2,11 @@
   <div class="page-container mx-4">
     <h1 class="text-center club-title">{{ clubName }}</h1>
     <h3 class="text-center club-leaders">
-      {{ clubInfo.leader }} · {{ clubInfo.coleader }}
+      {{ clubInfo?.leader }} · {{ clubInfo?.coleader }}
     </h3>
 
-    <div v-if="clubInfo.description" class="club-description">
-      {{ clubInfo.description }}
+    <div v-if="clubInfo?.description" class="club-description">
+      {{ clubInfo?.description }}
       <br />
     </div>
 

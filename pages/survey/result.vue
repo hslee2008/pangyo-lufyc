@@ -29,9 +29,13 @@
         variant="outlined"
         :style="`border-color: ${getColor(name)}`"
       >
-        <v-card-title class="club-name text-h4">{{
-          Object.keys(list ?? {})[name]
-        }}</v-card-title>
+        <p
+          v-for="item in Object.keys(list ?? {})[name].split(' ')"
+          :key="item"
+          class="club-name text-h4"
+        >
+          {{ item }}
+        </p>
         <v-rating
           :model-value="roundRating(item.totalAccumulation, item.totalCount)"
           color="amber"
@@ -75,6 +79,7 @@
       >
         <p
           v-for="item in Object.keys(list ?? {})[name + 3].split(' ')"
+          :key="item"
           class="club-name text-h4"
         >
           {{ item }}

@@ -76,12 +76,12 @@
           .filter((a) => {
             if (!searchByMajor.length) return true;
             if (searchByMajor) {
-              if (!Object.keys(a).includes('major')) return false;
-              if (searchByMajor.some((r) => a.major.includes(r))) return true;
+              if (!Object.keys(a)?.includes('major')) return false;
+              if (searchByMajor.some((r) => a.major?.includes(r))) return true;
             }
           })
           .filter((a) => {
-            if (a.name.includes(searchByName)) return true;
+            if (a.name?.includes(searchByName)) return true;
           })"
         :key="item.name"
         class="d-flex justify-center"

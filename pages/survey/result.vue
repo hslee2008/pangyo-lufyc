@@ -14,6 +14,13 @@
     </div>
 
     <br />
+
+    <v-card variant="tonal">
+      <v-card-text>
+        가중치 점수 = (평점 총합 / 설문자 수) x log(설문자수 + 1)
+      </v-card-text>
+    </v-card>
+
     <br />
 
     <h1 class="text-center">동아리</h1>
@@ -52,10 +59,23 @@
             >
           </div>
           <div>
-            <span class="label">평균 평점:</span>
-            <span class="value">{{
-              roundRating(item.totalAccumulation, item.totalCount)
-            }}</span>
+            <span class="value"
+              >가중치 점수:
+              {{
+                (
+                  (item.totalAccumulation / item.totalCount) *
+                  Math.log10(item.totalCount + 1)
+                ).toFixed(2)
+              }}</span
+            >
+          </div>
+          <div>
+            <span class="value">
+              <span class="label">평균 점수:</span>
+              <span class="value">{{
+                (item.totalAccumulation / item.totalCount).toFixed(2)
+              }}</span>
+            </span>
           </div>
           <div>
             <span class="label">설문 수:</span>
@@ -100,10 +120,23 @@
             >
           </div>
           <div>
-            <span class="label">평균 평점:</span>
-            <span class="value">{{
-              roundRating(item.totalAccumulation, item.totalCount)
-            }}</span>
+            <span class="value"
+              >가중치 점수:
+              {{
+                (
+                  (item.totalAccumulation / item.totalCount) *
+                  Math.log10(item.totalCount + 1)
+                ).toFixed(2)
+              }}</span
+            >
+          </div>
+          <div>
+            <span class="value">
+              <span class="label">평균 점수:</span>
+              <span class="value">{{
+                (item.totalAccumulation / item.totalCount).toFixed(2)
+              }}</span>
+            </span>
           </div>
           <div>
             <span class="label">설문 수:</span>
@@ -137,13 +170,13 @@ const fetchData = async () => {
     onValue(clubsRef, (snapshot) => resolve(snapshot.val()));
   });
 
-  const sortedEntries = Object.entries(surveyData)
-    .sort(([, a], [, b]) => b.totalCount - a.totalCount)
-    .sort(([, a], [, b]) => {
-      return (
-        b.totalAccumulation / b.totalCount - a.totalAccumulation / a.totalCount
-      );
-    });
+  const sortedEntries = Object.entries(surveyData).sort(([, a], [, b]) => {
+    const scoreA =
+      (a.totalAccumulation / a.totalCount) * Math.log10(a.totalCount + 1);
+    const scoreB =
+      (b.totalAccumulation / b.totalCount) * Math.log10(b.totalCount + 1);
+    return scoreB - scoreA;
+  });
 
   list.value = Object.fromEntries(sortedEntries);
   club.value = clubsData;

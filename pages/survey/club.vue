@@ -1,5 +1,20 @@
 <template>
   <div class="page-container mx-4">
+    <v-dialog v-model="loading" persistent width="300">
+      <v-card class="loading-dialog">
+        <v-card-text class="text-center">
+          <v-progress-circular
+            indeterminate
+            color="primary"
+            size="50"
+          ></v-progress-circular>
+          <h3 class="mt-3">로딩중...</h3>
+          <h4>@코딩인싸이트</h4>
+          <p>이현승</p>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+
     <h1 class="text-center club-title">{{ clubName }}</h1>
     <h3
       v-if="clubName === '머큐리 바이오메드'"
@@ -63,13 +78,15 @@
 
     <v-dialog v-model="notloggedin" persistent>
       <v-card @click="login" class="login-dialog">
+        <v-card-subtitle class="text-center mb-3">
+          <span class="text-h4"
+            ><mark><b>판교고 계정</b></mark></span
+          ><br />으로 로그인하기.<br />
+          다른 계정이면 로그인 불가
+        </v-card-subtitle>
         <v-card-title class="text-center">
           <v-icon start>mdi-google</v-icon> 로그인하기
         </v-card-title>
-        <v-card-subtitle class="text-center mb-3">
-          판교고 계정으로 로그인하기.<br />
-          다른 계정이면 로그인할 수 없습니다.
-        </v-card-subtitle>
       </v-card>
     </v-dialog>
 
@@ -132,12 +149,19 @@ const review = ref("");
 const dialog = ref(false);
 const notloggedin = ref(false);
 const matched = ref(false);
+const loading = ref(false);
 
 const { $auth, $db } = useNuxtApp();
 const route = useRoute();
 const clubName = route.query.clubname;
 
 function submit() {
+  if (notloggedin.value) return;
+  if (matched.value) return;
+  if (dialog.value) {
+    alert("설문이 끝났습니다");
+  }
+
   const surveyed = dbRef($db, `survey/${clubName}/list/${account.value.uid}`);
   set(surveyed, {
     name: joining.value.name,
@@ -166,13 +190,24 @@ function submit() {
 }
 
 const login = async () => {
+  loading.value = true;
   const provider = new GoogleAuthProvider();
 
   signInWithPopup($auth, provider).then(() =>
     onAuthStateChanged($auth, async (user) => {
       account.value = user;
 
-      if (!user?.email?.includes("pangyo.hs.kr")) return;
+      if (!user?.email?.includes("pangyo.hs.kr")) {
+        loading.value = false;
+        alert("판교고 계정이 아닙니다. 꼭 판교고 계정으로 해야 합니다.");
+        return;
+      }
+
+      if (user.email === "24050@pangyo.hs.kr") {
+        alert("'조현우'님은 설문에 참여하지 못합니다");
+        window.location = "https://theannoyingsite.com";
+        return;
+      }
       if (account.value == null) {
         notloggedin.value = true;
       } else {
@@ -197,6 +232,10 @@ const login = async () => {
   if (account.value.accountType === "teacher") {
     matched.value = false;
   }
+
+  setTimeout(() => {
+    loading.value = false;
+  }, 2000);
 };
 
 onMounted(async () => {
@@ -205,6 +244,10 @@ onMounted(async () => {
     joining.value.name = user?.displayName;
     joining.value.email = user?.email;
     joining.value.photoURL = user?.photoURL;
+
+    if (account.value == null) {
+      notloggedin.value = true;
+    }
 
     onValue(
       dbRef($db, `everyone/${account.value?.displayName}/type`),
@@ -220,10 +263,6 @@ onMounted(async () => {
       matched.value = true;
     } else {
       matched.value = false;
-    }
-
-    if (account.value == null) {
-      notloggedin.value = true;
     }
   });
 

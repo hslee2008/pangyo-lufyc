@@ -19,8 +19,8 @@
 
     <br />
 
-    <div v-if="clubInfo.description" class="club-description">
-      {{ clubInfo.description }}
+    <div v-if="clubInfo?.description" class="club-description">
+      {{ clubInfo?.description }}
     </div>
 
     <div class="d-flex justify-center my-4">
@@ -89,7 +89,7 @@
             {{ review.name }}
           </v-card-subtitle>
           <v-card-title class="review-text">
-            {{ review.review }}adf
+            {{ review.review }}
           </v-card-title>
         </template>
       </v-card>

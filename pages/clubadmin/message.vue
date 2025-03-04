@@ -12,7 +12,16 @@
         <v-card-text>
           <v-list>
             <v-list-item v-for="message in item" :key="message">
-              <v-list-item-title>{{ message }}</v-list-item-title>
+              <span v-if="message.includes('ans:')">
+                <v-list-item-title>
+                  <v-chip color="primary" class="ma-1">
+                    {{ message.replace("ans:", "") }}
+                  </v-chip>
+                </v-list-item-title>
+              </span>
+              <span v-else>
+                <v-list-item-title>{{ message }}</v-list-item-title>
+              </span>
             </v-list-item>
           </v-list>
 
@@ -124,7 +133,8 @@ function send(item, i) {
   });
 
   const questionRef = dbRef($db, `clubs/${clubName}/message/${i}`);
-  set(questionRef, null);
+  // add in answer
+  push(questionRef, "ans:" + answer.value);
 
   answer.value = "";
 }

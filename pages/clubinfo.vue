@@ -146,126 +146,7 @@
       <v-alert v-if="!clubInfo.finished" color="#86CFEB">
         동아리 신청 가능
       </v-alert>
-      <v-alert v-else color="red">
-        동아리 신청 마감
-      </v-alert>
-
-      <div
-        v-if="
-          clubInfo.leader?.replaceAll(' ', '') !== account.displayName &&
-          clubInfo.coleader?.replaceAll(' ', '') !== account.displayName
-        "
-      >
-        <br /><br />
-
-        <div v-if="false">
-          <h2>신청하기</h2>
-          <br />
-
-          <v-alert v-if="isClubJoiningFinished" color="red">
-            모집 기간이 자났습니다.
-          </v-alert>
-          <v-alert
-            v-else-if="
-              alreadyJoined &&
-              !Object.keys(clubInfo.joining ?? {}).includes(
-                account.displayName
-              ) &&
-              !Object.keys(clubInfo.accepted ?? {}).includes(
-                account.displayName
-              )
-            "
-          >
-            이미 다른 동아리에 가입했습니다.
-          </v-alert>
-
-          <v-alert
-            v-else-if="
-              Object.keys(clubInfo.joining ?? {}).includes(account.displayName)
-            "
-          >
-            신청이 되었습니다.
-            <br /><br />
-            <v-dialog max-width="500">
-              <template v-slot:activator="{ props: activatorProps }">
-                <v-btn
-                  v-bind="activatorProps"
-                  color="red"
-                  text="등록 취소하기"
-                  variant="flat"
-                ></v-btn>
-              </template>
-
-              <template v-slot:default="{ isActive }">
-                <v-card title="동아리 등록 취소 확인">
-                  <v-card-text> 정말로 동아리 취소를 원합니까? </v-card-text>
-
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-
-                    <v-btn
-                      text="아니요"
-                      @click="isActive.value = false"
-                    ></v-btn>
-
-                    <v-btn text="네" @click="cancelClub(isActive)"></v-btn>
-
-                    <v-spacer />
-                  </v-card-actions>
-                </v-card>
-              </template>
-            </v-dialog>
-          </v-alert>
-          <v-alert
-            v-else-if="
-              Object.keys(clubInfo.accepted ?? {}).includes(account.displayName)
-            "
-          >
-            동아리에 합격했습니다.
-          </v-alert>
-          <v-alert v-else-if="clubInfo.finished" color="red">
-            동아리가 수동으로 마감이 되었습니다.
-          </v-alert>
-          <div v-else>
-            <v-text-field
-              v-model="joining.name"
-              variant="outlined"
-              disabled
-              label="학번과 이름"
-            ></v-text-field>
-            <v-text-field
-              v-model="joining.email"
-              variant="outlined"
-              disabled
-              label="학교 이메일"
-            ></v-text-field>
-            <v-text-field
-              v-model="joining.phone"
-              variant="outlined"
-              label="전화번호"
-            ></v-text-field>
-            <v-textarea
-              v-if="clubInfo.getWhyJoined"
-              v-model="joining.whyJoined"
-              variant="outlined"
-              placeholder="자기소개 부분 (필수)"
-            ></v-textarea>
-
-            <v-btn
-              block
-              variant="tonal"
-              color="yellow-darken-4"
-              @click="join"
-              :disabled="
-                !joining.phone ||
-                (clubInfo.getWhyJoined ? !joining.whyJoined : false)
-              "
-            >
-              신청하기
-            </v-btn>
-          </div>
-        </div>
-      </div>
+      <v-alert v-else color="red"> 동아리 신청 마감 </v-alert>
 
       <br /><br />
 
@@ -273,20 +154,57 @@
         <v-card-title class="text-center mt-2">문의하기</v-card-title>
         <v-card-text>
           <v-textarea
+            :disabled="!account?.displayName"
             v-model="question"
             variant="outlined"
             placeholder="생기부 잘 써주나요?"
             append-inner-icon="mdi-send"
             @click:appendInner="send"
           ></v-textarea>
+          <div v-if="!account?.displayName">
+            문의하기는 판교고 계정으로 로그인 후 가능합니다.
+          </div>
+          <v-btn @click="login" v-if="!account?.displayName" variant="outlined" class="mt-3">
+            로그인
+          </v-btn>
         </v-card-text>
       </v-card>
+
+      <br /><br />
+
+      <div>
+        <div v-for="m in Object.keys(clubInfo.message ?? {})" :key="m">
+          <v-card variant="outlined">
+            <v-card-title>
+              <b>{{ m }}</b>
+            </v-card-title>
+            <v-card-text>
+              <v-list v-for="i in clubInfo.message[m]">
+                <span v-if="i.includes('ans:')">
+                  <v-list-item-title>
+                    <v-chip color="primary" class="ma-1">
+                      {{ i.replace("ans:", "") }}
+                    </v-chip>
+                  </v-list-item-title>
+                </span>
+                <span v-else>
+                  <v-list-item-title>{{ i }}</v-list-item-title>
+                </span>
+              </v-list>
+            </v-card-text>
+          </v-card>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { onAuthStateChanged } from "firebase/auth";
+import {
+  onAuthStateChanged,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
 
 const clubInfo = ref({
   leader: "",
@@ -398,4 +316,14 @@ function undoEnd() {
   const messageRef = dbRef($db, `clubs/${clubName}`);
   set(messageRef, clubInfo.value);
 }
+
+const login = async () => {
+  const provider = new GoogleAuthProvider();
+
+  signInWithPopup($auth, provider).then(() =>
+    onAuthStateChanged($auth, async (user) => {
+      account.value = user;
+    })
+  );
+};
 </script>

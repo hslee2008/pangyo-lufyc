@@ -97,52 +97,59 @@
         class="club-card"
         variant="outlined"
       >
-        <p
-          v-for="item in Object.keys(list ?? {})[name + 3].split(' ')"
-          :key="item"
-          class="club-name text-h4"
-        >
-          {{ item }}
-        </p>
-        <v-rating
-          :model-value="roundRating(item.totalAccumulation, item.totalCount)"
-          color="amber"
-          readonly
-          half-increments
-          size="small"
-          class="rating"
-        ></v-rating>
-        <v-card-subtitle class="club-info">
-          <div>
-            <span class="label">등수:</span>
-            <span class="value"
-              ><mark>{{ name + 4 }}등</mark></span
-            >
-          </div>
-          <div>
-            <span class="value"
-              >가중치 점수:
-              {{
-                (
-                  (item.totalAccumulation / item.totalCount) *
-                  Math.log10(item.totalCount + 1)
-                ).toFixed(2)
-              }}</span
-            >
-          </div>
-          <div>
-            <span class="value">
-              <span class="label">평균 점수:</span>
-              <span class="value">{{
-                (item.totalAccumulation / item.totalCount).toFixed(2)
-              }}</span>
-            </span>
-          </div>
-          <div>
-            <span class="label">설문 수:</span>
-            <span class="value">{{ item.totalCount }}</span>
-          </div>
-        </v-card-subtitle>
+        <template v-if="Object.keys(list ?? {})[name + 3] === '다이나믹스'">
+          <v-card elevation="0">
+            <v-card-subtitle class="text-center">다이나믹스는 포함시키지 않습니다.</v-card-subtitle>
+          </v-card>
+        </template>
+        <template v-else>
+          <p
+            v-for="item in Object.keys(list ?? {})[name + 3].split(' ')"
+            :key="item"
+            class="club-name text-h4"
+          >
+            {{ item }}
+          </p>
+          <v-rating
+            :model-value="roundRating(item.totalAccumulation, item.totalCount)"
+            color="amber"
+            readonly
+            half-increments
+            size="small"
+            class="rating"
+          ></v-rating>
+          <v-card-subtitle class="club-info">
+            <div>
+              <span class="label">등수:</span>
+              <span class="value"
+                ><mark>{{ name + 4 }}등</mark></span
+              >
+            </div>
+            <div>
+              <span class="value"
+                >가중치 점수:
+                {{
+                  (
+                    (item.totalAccumulation / item.totalCount) *
+                    Math.log10(item.totalCount + 1)
+                  ).toFixed(2)
+                }}</span
+              >
+            </div>
+            <div>
+              <span class="value">
+                <span class="label">평균 점수:</span>
+                <span class="value">{{
+                  (item.totalAccumulation / item.totalCount).toFixed(2)
+                }}</span>
+              </span>
+            </div>
+            <div>
+              <span class="label">설문 수:</span>
+              <span class="value">{{ item.totalCount }}</span>
+            </div>
+          </v-card-subtitle>
+        </template>
       </v-card>
     </div>
   </div>

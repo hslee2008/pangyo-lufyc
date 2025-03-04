@@ -52,7 +52,16 @@
 
       <br />
 
-      <v-btn color="primary" block rounded @click="submit">제출</v-btn>
+      <v-btn
+        v-if="!dialog"
+        color="primary"
+        block
+        rounded
+        :disabled="dialog"
+        @click="submit"
+      >
+        제출
+      </v-btn>
     </div>
 
     <v-dialog v-model="dialog" persistent>
@@ -200,6 +209,7 @@ const login = async () => {
       if (!user?.email?.includes("pangyo.hs.kr")) {
         loading.value = false;
         alert("판교고 계정이 아닙니다. 꼭 판교고 계정으로 해야 합니다.");
+        router.go(0);
         return;
       }
 

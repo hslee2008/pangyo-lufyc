@@ -1,74 +1,5 @@
 <template>
   <div class="mx-4" style="width: 100%">
-    <br />
-
-    <v-card
-      variant="tonal"
-      prepend-icon="mdi-clipboard-list"
-      title="동아리 발표회"
-      subtitle="동아리 발표회를 진행하고 평가해 주세요."
-      :to="`/survey/club/?clubname=${clubName}`"
-    ></v-card>
-
-    <br />
-
-    <div
-      v-if="
-        clubInfo.leader.replaceAll(' ', '') === account.displayName ||
-        clubInfo.coleader.replaceAll(' ', '') === account.displayName
-      "
-      class="mb-8 py-4 rounded-lg"
-      style="border: 1px solid black"
-    >
-      <h2 class="text-center mb-4">부장/차장 권한</h2>
-
-      <div class="d-flex justify-center ga-5 mb-3">
-        <v-btn
-          variant="tonal"
-          :to="`/clubadmin/edit/?clubname=${clubName}`"
-          class="text-blue"
-        >
-          정보 편집하기
-        </v-btn>
-        <v-btn
-          variant="tonal"
-          :to="`/clubadmin/status/?clubname=${clubName}`"
-          class="text-blue"
-        >
-          신청자 확인하기
-        </v-btn>
-      </div>
-      <div class="d-flex justify-center ga-5 mb-3">
-        <v-btn
-          variant="tonal"
-          :to="`/clubadmin/message/?clubname=${clubName}`"
-          class="text-blue"
-        >
-          문의 확인하기
-        </v-btn>
-        <v-btn
-          variant="tonal"
-          :to="`/clubadmin/notification/?clubname=${clubName}`"
-          class="text-blue"
-        >
-          공지사항 등록하기
-        </v-btn>
-      </div>
-      <div class="d-flex justify-center ga-5">
-        <v-btn
-          v-if="!clubInfo.finished"
-          variant="tonal"
-          color="red"
-          @click="end"
-        >
-          수동 마감하기
-        </v-btn>
-        <v-btn v-else variant="tonal" color="red" @click="undoEnd">
-          마감 풀기
-        </v-btn>
-      </div>
-    </div>
-
     <div class="pa-4 rounded-lg d-flex justify-center">
       <img
         :src="clubInfo.image ?? '/PGHS.png'"
@@ -78,11 +9,12 @@
       />
     </div>
 
-    <h1 class="text-center">{{ clubName }}</h1>
-    <h3 class="text-center">
-      {{ clubInfo.leader }} ·
-      {{ clubInfo.coleader }}
-    </h3>
+    <div class="d-flex justify-center">
+      <h1 class="text-center">{{ clubName }}</h1>
+      <v-btn variant="icon" :to="`/clubadmin/edit/?clubname=${clubName}`"
+        ><v-icon>mdi-pencil</v-icon> 수정</v-btn
+      >
+    </div>
 
     <br />
 
@@ -125,6 +57,26 @@
             <td>{{ clubInfo.how }}</td>
           </tr>
           <tr>
+            <td>지원 방법</td>
+            <td>
+              <v-chip
+                v-for="major in clubInfo.howmessage"
+                size="small"
+                class="ma-1"
+              >
+                {{ major }} (
+                {{
+                  major === "문자" || major === "카카오톡"
+                    ? clubInfo.phone
+                    : major === "인스타"
+                    ? clubInfo.insta
+                    : ""
+                }}
+                )
+              </v-chip>
+            </td>
+          </tr>
+          <tr>
             <td>모집 시기</td>
             <td>{{ clubInfo.start }} ~ {{ clubInfo.end }}</td>
           </tr>
@@ -133,15 +85,27 @@
 
       <br /><br />
 
-      <div v-if="clubInfo.poster">
-        <v-img :src="clubInfo.poster" class="rounded-lg mx-10 elevation-10" />
-        <div class="d-flex justify-center mt-3">
-          <v-btn variant="tonal" class="mt-3" download :href="clubInfo.poster">
-            <v-icon start>mdi-download</v-icon> 다운로드 받기
-          </v-btn>
+      <div v-if="clubInfo.poster" class="d-flex justify-center">
+        <div>
+          <v-img
+            :src="clubInfo.poster"
+            class="rounded-lg mx-10 elevation-10"
+            style="min-width: 300px"
+          />
+          <div class="d-flex justify-center mt-3">
+            <v-btn
+              variant="tonal"
+              class="mt-3"
+              download
+              :href="clubInfo.poster"
+            >
+              <v-icon start>mdi-download</v-icon> 다운로드 받기
+            </v-btn>
+          </div>
         </div>
-        <br /><br />
       </div>
+
+      <br /><br />
 
       <h2>경쟁률 확인하기</h2>
       <br />
@@ -160,29 +124,16 @@
           <tr>
             <td>남은 인원 수</td>
             <td>
-              {{
-                clubInfo.memberNumber -
-                Object.keys(clubInfo.accepted ?? {}).length
-              }}
+              {{ clubInfo.memberNumber - clubInfo.acc }}
             </td>
           </tr>
           <tr>
             <td>경쟁률</td>
-            <td
-              v-if="
-                Object.keys(clubInfo.joining ?? {}).length /
-                  (clubInfo.memberNumber -
-                    Object.keys(clubInfo.accepted ?? {}).length) <
-                1
-              "
-            >
-              100% 합격
-            </td>
-            <td v-else>
+            <td>
               {{
-                Object.keys(clubInfo.joining ?? {}).length /
-                (clubInfo.memberNumber -
-                  Object.keys(clubInfo.accepted ?? {}).length)
+                clubInfo.acc === 0
+                  ? "???"
+                  : (clubInfo.messaged / clubInfo.acc).toFixed(2)
               }}
               대 1
             </td>
@@ -190,125 +141,24 @@
         </tbody>
       </v-table>
 
-      <v-bottom-sheet>
-        <template v-slot:activator="{ props }">
-          <div class="d-flex justify-center">
-            <v-btn
-              v-bind="props"
-              text="자세한 경쟁률"
-              variant="outlined"
-              class="mt-5"
-            ></v-btn>
-          </div>
-        </template>
+      <br /><br />
 
-        <v-card>
-          <v-card class="ma-5" style="border: 1px solid black">
-            <v-table>
-              <thead>
-                <tr style="background-color: skyblue">
-                  <th class="text-left">카테고리</th>
-                  <th class="text-left">정보</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>최대 모집 인원 수</td>
-                  <td>{{ clubInfo.memberNumber }}</td>
-                </tr>
-                <tr>
-                  <td>남은 인원 수</td>
-                  <td>
-                    {{
-                      clubInfo.memberNumber -
-                      Object.keys(clubInfo.accepted ?? {}).length
-                    }}
-                  </td>
-                </tr>
-                <tr style="box-shadow: 0 -1px 0 #000">
-                  <td>전체 경쟁률</td>
-                  <td
-                    v-if="
-                      Object.keys(clubInfo.joining ?? {}).length /
-                        (clubInfo.memberNumber -
-                          Object.keys(clubInfo.accepted ?? {}).length) <
-                      1
-                    "
-                  >
-                    100% 합격
-                  </td>
-                  <td v-else>
-                    {{
-                      Object.keys(clubInfo.joining ?? {}).length /
-                      (clubInfo.memberNumber -
-                        Object.keys(clubInfo.accepted ?? {}).length)
-                    }}
-                    대 1
-                  </td>
-                </tr>
-                <tr style="box-shadow: 0 -1px 0 #000">
-                  <td>현재 총 지원자 수</td>
-                  <td>{{ Object.keys(clubInfo.joining ?? {}).length }}</td>
-                </tr>
-                <tr>
-                  <td>현재 1학년 지원자 수</td>
-                  <td>
-                    {{
-                      Object.keys(clubInfo.joining ?? {}).filter((a) =>
-                        a.startsWith("1")
-                      ).length
-                    }}
-                  </td>
-                </tr>
-                <tr>
-                  <td>현재 2학년 지원자 수</td>
-                  <td>
-                    {{
-                      Object.keys(clubInfo.joining ?? {}).filter((a) =>
-                        a.startsWith("2")
-                      ).length
-                    }}
-                  </td>
-                </tr>
-                <tr style="box-shadow: 0 -1px 0 #000">
-                  <td>현재 총 합격자 수</td>
-                  <td>{{ Object.keys(clubInfo.accepted ?? {}).length }}</td>
-                </tr>
-                <tr>
-                  <td>현재 1학년 합격자 수</td>
-                  <td>
-                    {{
-                      Object.keys(clubInfo.accepted ?? {}).filter((a) =>
-                        a.startsWith("1")
-                      ).length
-                    }}
-                  </td>
-                </tr>
-                <tr>
-                  <td>현재 2학년 합격자 수</td>
-                  <td>
-                    {{
-                      Object.keys(clubInfo.accepted ?? {}).filter((a) =>
-                        a.startsWith("2")
-                      ).length
-                    }}
-                  </td>
-                </tr>
-              </tbody>
-            </v-table>
-          </v-card>
-        </v-card>
-      </v-bottom-sheet>
+      <v-alert v-if="!clubInfo.finished" color="#86CFEB">
+        동아리 신청 가능
+      </v-alert>
+      <v-alert v-else color="red">
+        동아리 신청 마감
+      </v-alert>
 
       <div
         v-if="
-          clubInfo.leader.replaceAll(' ', '') !== account.displayName &&
-          clubInfo.coleader.replaceAll(' ', '') !== account.displayName
+          clubInfo.leader?.replaceAll(' ', '') !== account.displayName &&
+          clubInfo.coleader?.replaceAll(' ', '') !== account.displayName
         "
       >
         <br /><br />
 
-        <div>
+        <div v-if="false">
           <h2>신청하기</h2>
           <br />
 

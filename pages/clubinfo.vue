@@ -24,6 +24,13 @@
 
     <br />
 
+    <v-alert v-if="!clubInfo.finished" color="#86CFEB">
+      동아리 신청 가능
+    </v-alert>
+    <v-alert v-else color="red"> 동아리 신청 마감 </v-alert>
+
+    <br />
+
     <v-alert v-if="Object.keys(clubInfo ?? {}).length <= 3">
       <v-empty-state
         icon="mdi-information-off"
@@ -54,7 +61,19 @@
           </tr>
           <tr>
             <td>모집 방법</td>
-            <td>{{ clubInfo.how }}</td>
+            <td>
+              {{ clubInfo.how }}
+              <v-chip
+                v-if="clubInfo.how === '자기소개서' && !clubInfo.howmessage?.includes('구글폼')"
+                color="primary"
+                size="small"
+                class="ml-2"
+                @click="downloadURI('/동아리자기소개서.hwp', '자기소개서.hwp')"
+              >
+                양식 다운로드
+              </v-chip>
+              <p v-if="clubInfo.howmessage?.includes('카카오톡') && clubInfo.how === '자기소개서'" style="color: red;">* 카톡으로 보내주세요</p>
+            </td>
           </tr>
           <tr>
             <td>지원 방법</td>
@@ -64,15 +83,33 @@
                 size="small"
                 class="ma-1"
               >
-                {{ major }} (
-                {{
-                  major === "문자" || major === "카카오톡"
-                    ? clubInfo.phone
-                    : major === "인스타"
-                    ? clubInfo.insta
-                    : ""
-                }}
-                )
+                <a
+                  v-if="major === '구글폼'"
+                  :href="clubInfo.formlink"
+                  target="_blank"
+                >
+                  구글폼 (링크)
+                </a>
+                <a v-else-if="major === '인스타'">
+                  인스타
+                  <a
+                    v-for="(i, ind) in parse(clubInfo.insta).split(' ')"
+                    :href="i"
+                    :key="i"
+                    >{{ clubInfo.insta.split(" ")[ind] }}<span v-if="ind !== parse(clubInfo.insta).split(' ').length - 1">,</span>
+                  </a>
+                </a>
+                <span v-else
+                  >{{ major }} (
+                  {{
+                    major === "문자" || major === "카카오톡"
+                      ? clubInfo.phone
+                      : major === "인스타"
+                      ? clubInfo.insta
+                      : ""
+                  }}
+                  )</span
+                >
               </v-chip>
             </td>
           </tr>
@@ -97,20 +134,13 @@
               variant="tonal"
               class="mt-3"
               download
-              :href="clubInfo.poster"
+              :href="downloadImage(clubInfo.poster)"
             >
-              <v-icon start>mdi-download</v-icon> 다운로드 받기
+              <v-icon start>mdi-download</v-icon> 다운로드
             </v-btn>
           </div>
         </div>
       </div>
-
-      <br /><br />
-
-      <v-alert v-if="!clubInfo.finished" color="#86CFEB">
-        동아리 신청 가능
-      </v-alert>
-      <v-alert v-else color="red"> 동아리 신청 마감 </v-alert>
 
       <br /><br />
 
@@ -128,7 +158,12 @@
           <div v-if="!account?.displayName">
             문의하기는 판교고 계정으로 로그인 후 가능합니다.
           </div>
-          <v-btn @click="login" v-if="!account?.displayName" variant="outlined" class="mt-3">
+          <v-btn
+            @click="login"
+            v-if="!account?.displayName"
+            variant="outlined"
+            class="mt-3"
+          >
             로그인
           </v-btn>
         </v-card-text>
@@ -137,7 +172,11 @@
       <br /><br />
 
       <div>
-        <div v-for="m in Object.keys(clubInfo.message ?? {})" :key="m" class="mb-3">
+        <div
+          v-for="m in Object.keys(clubInfo.message ?? {})"
+          :key="m"
+          class="mb-3"
+        >
           <v-card variant="outlined">
             <v-card-title>
               <b>{{ m }}</b>
@@ -290,4 +329,41 @@ const login = async () => {
     })
   );
 };
+
+async function downloadImage(imageSrc) {
+  const image = await fetch(imageSrc);
+  const imageBlog = await image.blob();
+  const imageURL = URL.createObjectURL(imageBlog);
+
+  const link = document.createElement("a");
+  link.href = imageURL;
+  link.download = "image file name here";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+function parse(text) {
+  const regex = /@(\S+)/g; // Regex to match Instagram-style handles
+  let matches = text.match(regex); // Find all matches
+
+  if (matches) {
+    return matches
+      .map((username) => {
+        let cleanUsername = username.replace("@", ""); // Remove '@' from the username
+        return `https://instagram.com/${cleanUsername}`;
+      })
+      .join(" "); // Join links with spaces
+  }
+
+  return text; // Return original text if no matches found
+}
+
+function downloadURI(uri, name) {
+  var link = document.createElement("a");
+  link.download = name; // <- name instead of 'name'
+  link.href = uri;
+  link.click();
+  link.remove();
+}
 </script>

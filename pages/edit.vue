@@ -13,7 +13,7 @@
       prepend-inner-icon="mdi-magnify"
     ></v-text-field>
 
-    <v-autocomplete
+    <v-combobox
       v-model="searchByMajor"
       :items="majors"
       chips
@@ -25,7 +25,7 @@
       <template v-slot:chip="{ props, item }">
         <v-chip v-bind="props" :text="item.raw.name"></v-chip>
       </template>
-    </v-autocomplete>
+    </v-combobox>
 
     <div class="d-flex ga-3">
       <v-checkbox v-model="onlySeeCanJoin" label="모집 중"></v-checkbox>
@@ -145,6 +145,8 @@ const majors = [
   "문화재보존학과",
   "물리치료학과",
   "물리학과",
+  "미술학과",
+  "미술교육과",
   "법학과",
   "북한학과",
   "불교학과",

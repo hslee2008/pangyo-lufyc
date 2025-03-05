@@ -49,23 +49,6 @@
       placeholder="동아리 소개글"
     ></v-textarea>
 
-    <div class="d-flex justify-center ga-3">
-      <v-text-field
-        v-model="clubInfo.acc"
-        variant="outlined"
-        placeholder="ex) 15"
-        class="mt-4"
-        label="모집한 동아리원 수"
-      ></v-text-field>
-      <v-text-field
-        v-model="clubInfo.messaged"
-        variant="outlined"
-        placeholder="ex) 30"
-        class="mt-4"
-        label="지원한 동아리원 수"
-      ></v-text-field>
-    </div>
-
     <div class="d-flex justify-center">
       <v-alert style="display: block; overflow: auto">
         <v-file-input

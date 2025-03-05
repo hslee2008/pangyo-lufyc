@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-4" style="width: 100%">
+  <div class="mx-10" style="width: 95%">
     <div class="pa-4 rounded-lg d-flex justify-center">
       <img
         :src="clubInfo.image ?? '/PGHS.png'"
@@ -107,42 +107,6 @@
 
       <br /><br />
 
-      <h2>경쟁률 확인하기</h2>
-      <br />
-      <v-table style="border: 1px solid black" class="rounded-lg">
-        <thead>
-          <tr style="background-color: skyblue">
-            <th class="text-left">카테고리</th>
-            <th class="text-left">정보</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>최대 모집 인원 수</td>
-            <td>{{ clubInfo.memberNumber }}</td>
-          </tr>
-          <tr>
-            <td>남은 인원 수</td>
-            <td>
-              {{ clubInfo.memberNumber - clubInfo.acc }}
-            </td>
-          </tr>
-          <tr>
-            <td>경쟁률</td>
-            <td>
-              {{
-                clubInfo.acc === 0
-                  ? "???"
-                  : (clubInfo.messaged / clubInfo.acc).toFixed(2)
-              }}
-              대 1
-            </td>
-          </tr>
-        </tbody>
-      </v-table>
-
-      <br /><br />
-
       <v-alert v-if="!clubInfo.finished" color="#86CFEB">
         동아리 신청 가능
       </v-alert>
@@ -173,7 +137,7 @@
       <br /><br />
 
       <div>
-        <div v-for="m in Object.keys(clubInfo.message ?? {})" :key="m">
+        <div v-for="m in Object.keys(clubInfo.message ?? {})" :key="m" class="mb-3">
           <v-card variant="outlined">
             <v-card-title>
               <b>{{ m }}</b>
